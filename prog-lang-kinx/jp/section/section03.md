@@ -251,31 +251,23 @@ if (str[5] == 'a'[0]) {
 
 ### `=~` 演算子
 
-文字列に対して `=~` を適用した場合、右辺値の正規表現にマッチするかどうかを確認します。
+文字列に対して `=~` を適用した場合、右辺値の正規表現[^regex]にマッチするかどうかを確認します。
 右辺値が正規表現のオブジェクトではなかった場合、例外が送出されます。
 復帰値はマッチしたグループの集合となり、
 マッチしなかった場合は `False` オブジェクトが返ります。
 
+[^regex]: 正規表現に関しては「\\nameref{正規表現}」を参照ください。
+
 ```javascript
 if (g = ("abc" =~ /(.)(bc)/)) {
-    System.println(g.toJsonString(true));
+    g.each { => System.println(_1) };
 }
 ```
 
 ```console
-[{
-    "begin": 0,
-    "end": 3,
-    "string": "abc"
-}, {
-    "begin": 0,
-    "end": 1,
-    "string": "a"
-}, {
-    "begin": 1,
-    "end": 3,
-    "string": "bc"
-}]
+{"begin":0,"end":3,"string":"abc"}
+{"begin":0,"end":1,"string":"a"}
+{"begin":1,"end":3,"string":"bc"}
 ```
 
 なお、左辺値が正規表現オブジェクトで右辺値が文字列の場合でも同様の動作を行います。
@@ -288,9 +280,13 @@ if (g = ("abc" =~ /(.)(bc)/)) {
 true の場合が、マッチしなかった場合です。
 
 ```javascript
-if (g = ("axc" !~ /(.)(bc)/)) {
-    System.println(g);  // => 1
+if ("axc" !~ /(.)(bc)/) {
+    System.println("not matched");
 }
+```
+
+```console
+not matched
 ```
 
 こちらのケースでも同様に、左辺値と右辺値が逆でも同様の動作を行います。
@@ -302,12 +298,14 @@ if (g = ("axc" !~ /(.)(bc)/)) {
 
 ```javascript
 var a = *"abc";
-var b = *[97, 98, 99];
-System.println([a, b]);
+var b = *a;
+System.println(a);
+System.println(b);
 ```
 
 ```console
-[[97, 98, 99], "abc"]
+[97, 98, 99]
+abc
 ```
 
 このように、いくつかの型同士での相互変換が可能です。
@@ -508,7 +506,7 @@ System.println("The text".red(.white).bold().underline());
 <context label="Table:KinxStringAttrs"/>
 <context caption="文字装飾"/>
 
-|    装飾    |    メソッド    |                  |
+|    装飾    |    メソッド    |       意味       |
 | :--------: | -------------- | ---------------- |
 |  ボールド  | `.bold()`      | 太字にする。     |
 |    下線    | `.underline()` | 下線を付ける。   |
@@ -779,34 +777,99 @@ check(obj);
 {"a":100,"b":200,"c":300,"d":null}
 ```
 
-また、受け取り側で定数を指定した場合は、パターンマッチと見なされます。
-指定の要素がパターンと一致しない場合、例外が送出されます。
-
-```javascript
-function check({ a, b, x: 300, y: d }) {
-    System.println({ a, b, d });
-}
-check({ a: 100, b: 200, x: 300 });
-check({ a: 100, b: 200, x: 30 });   // Exception occurs.
-```
-
-```console
-{"a":100,"b":200,"d":null}
-Uncaught exception: No one catch the exception.
-NoMatchingPatternException: Pattern not matched
-Stack Trace Information:
-        at function check(test.kx:1)
-        at <main-block>(test.kx:5)
-```
-
 分割代入の詳細は「\\nameref{分割代入とパターンマッチ}」を参照してください。
 
 ## 正規表現
 ### 正規表現リテラル
 
 正規表現リテラルは `/.../` の形式で扱います。
-また、リテラル内の「`/`」は「`\`」でエスケープする必要があります。
-以下に例を示します。
+この中では `/` 以外、例えば改行コードなどにエスケープを行う必要はありません。
+リテラル内の「`/`」のみ「`\`」でエスケープする必要があります。
+
+```javascript
+/ab+[\t\n]/
+```
+
+また、これは以下と同じ意味になります。
+この書き方の場合、改行などもエスケープが必要です。
+Raw 文字列の書き方であればエスケープは不要です。
+
+```javascript
+new Regex("ab+[\\t\\n]");  // same as /ab+[\t\n]/
+new Regex(%|ab+[\t\n]|);   // same as /ab+[\t\n]/
+```
+
+正規表現オブジェクトとして、`/` の記号を変更したい場合は、`%m` プレフィックスを付けて任意の記号を利用可能です。
+使用した記号以外はエスケープする必要がありません。
+このとき、Raw 文字列とは違い正規表現文字列で使っていない文字で囲うことが可能ですので、
+次のような書き方もできます[^regexpat]。
+
+[^regexpat]: できたほうが良いのかと言われると、そうでもありませんが。
+
+```javascript
+%m1ab+[\t\n]1  // same as /ab+[\t\n]/
+```
+
+囲み文字としてカッコを使う場合は対応する閉じカッコで対応させるように記述します。
+
+```javascript
+%m<ab+[\t\n]>  // same as /ab+[\t\n]/
+%m(ab+[\t\n])  // same as /ab+[\t\n]/
+```
+
+
+### 文字列メソッドへの適用
+
+正規表現オブジェクトは、文字列に対する以下のメソッドの条件として使用できます。
+
+#### replace
+
+`String.replace()` 関数は、変換元の文字列条件を正規表現で指定することが可能です。
+
+```javascript
+var s = "xabbbbbcabbc".replace(/ab+/, ",");
+System.println(s);
+```
+
+```console
+x,c,c
+```
+
+#### find
+
+`String.find()` 関数は、検索文字列として正規表現を指定することが可能です。
+
+```javascript
+System.println("abcdefg".find("cd"));
+System.println("abcdefg".find(/cd/));
+```
+
+```console
+2
+[{"begin":2,"end":4,"string":"cd"}]
+```
+
+通常の文字列で指定した場合は検出した場所のインデックスを返しますが、
+正規表現で指定した場合は検出したグループの配列を返します。
+
+#### split
+
+`String.split()` 関数は、区切り文字列を正規表現で指定することが可能です。
+
+```javascript
+var s = "xabbbbbcabbc".split(/ab+/);
+s.each(&(e) => System.println(e));
+```
+
+```console
+x
+c
+c
+```
+
+### 基本的な使い方
+
+正規表現の基本的な使い方の例を示します。
 
 ```javascript
 var a = "111/aaa/bbb/ccc/ddd";
@@ -843,30 +906,233 @@ while (group = (a =~ %m(\w+/))) {
 }
 ```
 
-なお、正規表現リテラルを `while` 等の条件式に入れることができますが、1 点だけ注意点があります。
+### 正規表現リテラルに対する注意
 
-例えば以下のように記述した場合、`str` の文字列に対してマッチしなくなるまでループを回すことができます（この時、`group` にはキャプチャ一覧が入ります）。
-その際、最後のマッチまで実行せずに途中で `break` 等でループを抜けると正規表現リテラルの対象文字列が次回のループで正しくリセットされない、という状況が発生します。
+正規表現リテラルを `while` 等の条件式に入れることができますが、注意点があります。
+
+例えば次のように記述した場合、`str` の文字列に対してマッチしなくなるまでループを回すことができます（`group` にはキャプチャ一覧が入ります）。
+その際、最後のマッチまで実行せずに途中で `break` 等でループを抜けると、
+正規表現リテラルの対象文字列が次回のループで正しくリセットされない場合があります。
 
 ```javascript
 while (group = (str =~ /ab+/)) {
     /* block */
+    if (expr) {
+        break;
+    }
 }
 ```
 
-正規表現リテラルがリセットされるタイミングは以下の 2 パターンです。
+`break` で一旦抜けた後に再度同じ `while` ループに戻ってきた場合、
+検索開始場所が前回の続きとなってしまうという動作になります。
+最後までループが回った場合（見つからない状態までループした場合）は問題ありません。
+また、`str` の示す文字列が変化していた場合も問題ありません。
 
-* 初回（前回のマッチが失敗して再度式が評価された場合を含む）。
-* `str` の内容が変化した場合。
+まとめると、正規表現リテラルがリセットされるタイミングは次の 2 パターンあり、
+この条件に合えば問題ありません。
 
-現時点で本動作は仕様です。
+*   初回（前回のマッチが失敗して再度式が評価された場合を含む）。
+*   `str` の内容が変化した場合。
+
+現時点で本動作は仕様となります。
 扱う際にはご注意願います。
 
-### 基本的な使い方
 ## 範囲表現
-### `Range` クラスと範囲リテラル
+
+範囲は「ある値からある値まで」を示す Range クラスのインスタンス（Range オブジェクト）を示します。
+
+### `Range` クラス
+
+Range オブジェクトは以下のように構築できます。
+作成されたインスタンスは、指定された値に従って「ある値からある値まで」の範囲を示します。
+
+```javascript
+new Range(初値, 終値, 終値除外フラグ)
+```
+
+### 範囲リテラル（ドット記法）
+#### 数値
+
+Range はドット記法で記載することもできます。
+ドット 2 つの場合は終端を含みます。
+ドットを 3 つにすると、終端を含まない範囲となります。
+
+```javascript
+var a = 2..10;  // new Range(2, 10)
+var b = 2...10; // new Range(2, 10, true)
+```
+
+初値、終値の部分には、変数や式も使うことができます。
+
+```javascript
+function makeRange(begin, len) {
+    return begin..(begin+len);
+}
+System.println(makeRange(100, 2).end());
+```
+
+```console
+102
+```
+
+#### 文字列
+
+文字列の範囲も定義できます。
+
+```javascript
+var a = "a".."z";     // new Range("a", "z")
+var b = "ab"..."ax";  // new Range("ab", "ax", true)
+```
+
+ダブルクォートでもシングルクォートでも同じ意味です。
+
+```javascript
+var l = 'a'..'g';  // 'a', 'b', 'c', ..., 'g'
+l.each { => System.println(_1) };
+```
+
+```console
+a
+b
+c
+d
+e
+f
+g
+```
+
+#### 日付
+
+日付も範囲で扱えます。
+
+```javascript
+using DateTime;
+var l = DateTime("2000/1/1")..DateTime("2000/1/6");
+l.each { => System.println(_1.format("%MMMM% %DD%, %YYYY%")) };
+```
+
+```console
+January 01, 2000
+January 02, 2000
+January 03, 2000
+January 04, 2000
+January 05, 2000
+January 06, 2000
+```
+
+#### 初値と終値
+
+終値は省略できます。
+終端の無い範囲を示します。
+たとえば、`1..` とすると、これは自然数を示します。
+ただし、初値は省略できません。
+どうしても省略したい場合は、null を使用します。
+
+```javascript
+1..;        // => Okay
+1...;       // => Okay
+..10;       // => error
+...10;      // => error
+null..10;   // => Okay
+```
+
 ### `Enumerable` クラス
-### 基本的な使い方
+
+Range オブジェクトは Enumerable モジュールを mixin しているため、
+Enumerable のインタフェースが利用できます。
+
+現時点で実装しているインターフェースは以下の通りです。
+**「遅延」** にマークされているものは、`lazy()` 呼び出しをした際に Enumerator オブジェクトを返し、
+遅延評価実行されるようになるメソッドです。
+
+<context label="Table:KinxEnumerable"/>
+<context caption="Enumerable メソッド"/>
+<context limit-column="2"/>
+
+|     メソッド     |                                        内容                                         | 遅延  |
+| ---------------- | ----------------------------------------------------------------------------------- | :---: |
+| `filter(f)`      | 各要素に対し `f` 関数の結果が真となる要素でフィルタする。                           |   O   |
+| `map(f)`         | 各要素に対し `f` 関数を適用させた結果を返す。                                       |   O   |
+| `flatMap(f)`     | 各要素に対し `f` 関数を適用させた結果をフラットにして返す。                         |   O   |
+| `take(n)`        | 先頭から `n` 個の要素を抽出する。                                                   |   O   |
+| `takeWhile(f)`   | `f` に適合している間、要素を抽出する。                                              |   O   |
+| `drop(n)`        | 先頭から `n` 個の要素を捨てて残りを抽出する。                                       |   O   |
+| `dropWhile(f)`   | `f` に適合している間の要素を捨てて、残りを抽出する。                                |   O   |
+| `each(f)`        | 全ての要素を `f` に順に流す。                                                       |   O   |
+| `reduce(f, itr)` | 初期値から開始し、順に `f` 関数を適用した結果で `reduce` する。                     |       |
+| `sort(f)`        | `f` を比較関数としてソートを実施する。                                              |       |
+| `all(f)`         | 全ての要素が `f` 適用結果で真となる場合、真となる。                                 |       |
+| `any(f)`         | 要素の中で `f` 適用結果が真となるものが存在する場合、真となる。                     |       |
+| `toArray()`      | 要素をすべて抽出し、配列として返す。                                                |       |
+| `println()`      | 全ての要素を出力する。                                                              |       |
+| `lazy()`         | 上記「遅延：O」のメソッドを遅延評価メソッドとして動作するようにして自分自身を返す。 |       |
+
+なお、遅延評価ではないものに無限数列のような Range を与えると返ってこなくなりますので注意してください。
+
+### Range for Switch-Case
+
+`switch-case/when` の `case` または `when` 文で Range オブジェクトを指定できます。
+指定した範囲にマッチするか確認します。
+次の例は数値で指定した例です。
+
+```javascript
+for (var i = 0; i <= 10; ++i) {
+    switch (i) {
+    when 1..4:
+        System.println("okay 1 (%{i})");
+    when 7...9:
+        System.println("okay 2 (%{i})");
+    else:
+        System.println("out of range (%{i})");
+    }
+}
+```
+
+```console
+out of range (0)
+okay 1 (1)
+okay 1 (2)
+okay 1 (3)
+okay 1 (4)
+out of range (5)
+out of range (6)
+okay 2 (7)
+okay 2 (8)
+out of range (9)
+out of range (10)
+```
+
+次の例は文字列で指定した例です。
+
+```javascript
+for (var i in 's'..'af') {
+    switch (i) {
+    when 'ac'..'ae':
+        System.println("okay 1 (%{i})");
+    when 't'...'w':
+        System.println("okay 2 (%{i})");
+    else:
+        System.println("out of range (%{i})");
+    }
+}
+```
+
+```console
+out of range (s)
+okay 2 (t)
+okay 2 (u)
+okay 2 (v)
+out of range (w)
+out of range (x)
+out of range (y)
+out of range (z)
+out of range (aa)
+out of range (ab)
+okay 1 (ac)
+okay 1 (ad)
+okay 1 (ae)
+out of range (af)
+```
 
 ## データ型の相互変換
 
@@ -903,12 +1169,12 @@ String.greeting = function(name) {
 
 実行してみると、以下のように出力されます。
 
-```
+```console
 Hello, I am John.
 ```
 
 対象となる `"John"` が `String.greeting` 関数の `name` に引き渡されたのが分かるでしょう。
-つまり、対象オブジェクトが特殊オブジェクトの第一引数として渡されるといった動作をします。
+つまり、対象オブジェクトが特殊メソッドの第一引数として渡されるといった動作をします。
 この仕組みを使って、文字列に対する操作関数を自由に定義することができます。
 
 特殊オブジェクトに定義されたメソッドを特殊メソッドと呼び、

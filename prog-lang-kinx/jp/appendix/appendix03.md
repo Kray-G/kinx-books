@@ -115,14 +115,13 @@ Array の特殊メソッドはオブジェクトにも適用されることに�
 | `Binary.map(bin, f)`             | `bin` の各要素 `e` に対して `f(e, index)` の結果の集合となる新たなバイナリを返す。                                                            |
 | `Binary.filter(bin, f)`          | `bin` の各要素 `e` に対して `f(e, index)` の結果が真となるもののみの集合として新たなバイナリを返す。                                          |
 | `Binary.reject(bin, f)`          | `bin` の各要素 `e` に対して `f(e, index)` の結果が偽となるもののみの集合として新たなバイナリを返す。                                          |
-| `Binary.reduce(bin, f, itr)`     | 前の要素までの結果を `r` （初期値は `itr`、デフォルト null）として、`bin` の各要素 `e` に対し `f(r, e)` を行った最終結果を返す。              |
+| `Binary.reduce(bin, f, i)`       | 前の要素までの結果を `r` （初期値は `i`、デフォルト null）として、`bin` の各要素 `e` に対し `f(r, e)` を行った最終結果を返す。                |
 | `Binary.sort(bin, c)`            | 任意の `bin` の要素 `e1`, `e2` に対する `c(e1, e2)` の結果を利用して `bin` 全体をソートした新たなバイナリを返す。                             |
 | `Binary.clone(bin)`              | `bin` のコピーを作成する。                                                                                                                    |
 | `Binary.println(bin)`            | `bin` の各要素 `e` に対して `System.println(e)` を適用する。                                                                                  |
 
 基本的にバイナリ列に適用することになるため、あまり複雑なことはできません。
 Array と同様に `push`、`pop`、`unshift`、`shift` は破壊的な操作を行います。
-`push`、`pop`、`unshift`、`shift` は破壊的な操作を行います。
 
 また、バイナリに対するメソッドは、配列と比較してネイティブ・コードで最適化されているケースがいくつかあります。
 例えば、`Array.sort(ary, compfunc)` と `Binary.sort(bin, compfunc)` はクイックソートですが、
