@@ -7,13 +7,13 @@
 <context caption="Special Method (Integer)"/>
 <context limit-column="0"/>
 
-|           Method            |                                              Outline                                              |
-| ----------------------------- | ---------------------------------------------------------------------------------------------- |
-| `Integer.times(val, f)`       | Returns an array of `i` if no `f`, otherwise returns `f(i)` with the range of `i = 0 ... val`. |
-| `Integer.upto(val, max, f)`   | Calls `f(i)` with the argument as the range of `i = val .. max`.                               |
-| `Integer.downto(val, min, f)` | Calls `f(i)` with the argument as the range of `i = min .. val`.                               |
-| `Integer.toString(val, rdx)`  | Converts `val` to String. `rdx` is a radix.                                                    |
-| `Integer.toDouble(val)`       | Converts `val` to Double.                                                                      |
+|            Method             |                                             Outline                                              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------ |
+| `Integer.times(val, f)`       | Returns an array of `i` if no `f`, otherwise returns `f(i)` with the range of `i` (`0 ... val`). |
+| `Integer.upto(val, max, f)`   | Calls `f(i)` with the argument as the range of `i` (`val .. max`).                               |
+| `Integer.downto(val, min, f)` | Calls `f(i)` with the argument as the range of `i` (`min .. val`).                               |
+| `Integer.toString(val, rdx)`  | Converts `val` to String. `rdx` is a radix.                                                      |
+| `Integer.toDouble(val)`       | Converts `val` to Double.                                                                        |
 
 As Integer includes both 64 bit integer and a big integer, those methods will also apply to Big Integer.
 However, note that it could be almost like infinite loop when Big Integer passed to the method with loop.
@@ -26,7 +26,7 @@ However, note that it could be almost like infinite loop when Big Integer passed
 
 |           Method            |                                                             Outline                                                             |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `Double.toString(val, fmt)` | Converts `val` to String. `fmt` is started with `%` and with one of `a`, `A`, `e`, `E`, `f`, `F`, `g`, or `G`. `%g` by default. |
+| `Double.toString(val, fmt)` | Converts `val` to String. `fmt` is one of `%a`, `%A`, `%e`, `%E`, `%f`, `%F`, `%g`, or `%G`. `%g` by default. |
 | `Double.toInt(val)`         | Converts `val` to Integer.                                                                                                      |
 
 As for Special Method to a real number, there is basically nothing but type conversion.
@@ -41,8 +41,8 @@ As for Special Method to a real number, there is basically nothing but type conv
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `String.startsWith(str, s)`     | Returns true if String is started with `s`.                                                                                 |
 | `String.endsWith(str, s)`       | Returns true if String is ended with `s`.                                                                                   |
-| `String.toUpper(str, [s, e])`   | Makes it uppercases of `str` from the index of `s` to the index of `e-1`. Makes all uppercases when omitted `s` and `e`.    |
-| `String.toLower(str, [s, e])`   | Makes it lowercases of `str` from the index of `s` to the index of `e-1`. Makes all lowercases when omitted `s` and `e`.    |
+| `String.toUpper(str, [s, e])`   | Makes it uppercases of `str` in the range of `[s, e)`. Makes all uppercases when omitted `s` and `e`.                       |
+| `String.toLower(str, [s, e])`   | Makes it lowercases of `str` in the range of `[s, e)`. Makes all lowercases when omitted `s` and `e`.                       |
 | `String.trim(str, [c])`         | Trims the head and tail of `str` by the character specified as `c`. White spaces will be removed when omitted the argument. |
 | `String.trimLeft(str, [c])`     | Trims the head of `str` by the character specified as `c`. White spaces will be removed when omitted the argument.          |
 | `String.trimRight(str, [c])`    | Trims the tail of `str` by the character specified as `c`. White spaces will be removed when omitted the argument.          |

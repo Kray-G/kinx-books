@@ -20,6 +20,10 @@ and which has the charactaric of a dynamically typed language and a C-like synta
 
 In short, to put Kinx in a sentense, **it is a script language with a traditional C-style syntax fitting in a programmer\\apos{}s hand.**
 
+But Kinx also has a simple Type Annotation feature.
+Only when Kinx can handle it, but it will indicate an error by Type Annotation in the case when it find some clearly unexpected mismatches between types.
+See ''\\nameref{Type Annotation}'' for details.
+
 ## Kinx Features
 
 ### The Concept
@@ -35,7 +39,7 @@ If you are a C programmer, Kinx is more comfortable than Ruby and Python, and yo
 Kinx is a **dynamically typed language** and an **object oriented programming language.**
 The main features are below.
 
-* Dynamically Typed Language.
+* Dynamically Typed Language, but also supporting Type Annotation.
 * Object Oriented Programming Language.
 * C Like Syntax, it\\apos{}s almost JavaScript.
 * Class and Inheritance, Module and Mix-in, and Fiber.

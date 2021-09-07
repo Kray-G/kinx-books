@@ -8,8 +8,9 @@
 <param multibytefont="jp"/>
 <param titleSize="78.8"/>
 <param subtitleSize="24.8"/>
-<param backgroundImage="back.png"/>
+<param backgroundImage="ximg/back.png"/>
 <style-info name="chapter.style" value="BigChapter3" />
+<style-info name="bookmark.openLevel" value="0" />
 
 <toc with="lof,lot"/>
 

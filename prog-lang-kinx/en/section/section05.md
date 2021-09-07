@@ -23,3 +23,5 @@
 ### `methodMissing`
 ### Deconstructing and Pattern Matching Assignment
 ### Exception
+
+## Type Annotation

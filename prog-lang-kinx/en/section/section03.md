@@ -456,7 +456,7 @@ To specify a foreground and background color, do it like the foloowing.
 System.println("The text".red(.white));
 ```
 
-![](redwhite.png)
+![](ximg/redwhite.png)
 
 A background color should be specified in the arugument of a foreground setting method.
 Note that it is started with `.` such as `.white`.
@@ -484,7 +484,7 @@ You can specify decorations as well as colors.
 System.println("The text".red(.white).bold().underline());
 ```
 
-![](redboldwhite.png)
+![](ximg/redboldwhite.png)
 
 As you see, colors and decorations can be specified at the same time.
 
@@ -496,13 +496,13 @@ However, note that some decorations does not work depended on the console and fo
 <context label="Table:KinxStringAttrs"/>
 <context caption="String Decorations"/>
 
-| Decoration |     Method     |         Meaning          |
-| :--------: | -------------- | ------------------------ |
-|    Bold    | `.bold()`      | Make it **bold**.        |
-| Underline  | `.underline()` | Make it ___underline___. |
-|   Itaric   | `.italic()`    | Make it *itaric*.        |
-|  Reverse   | `.reverse()`   | Reverse the color.       |
-|   Blink    | `.blink()`     | Make it blink.           |
+| Decoration |     Method     |             Meaning             |
+| :--------: | -------------- | ------------------------------- |
+|    Bold    | `.bold()`      | Make it **bold**.               |
+| Underline  | `.underline()` | Make it \\underline{underline}. |
+|   Itaric   | `.italic()`    | Make it *itaric*.               |
+|  Reverse   | `.reverse()`   | Reverse the color.              |
+|   Blink    | `.blink()`     | Make it blink.                  |
 
 ## Array
 
@@ -1023,29 +1023,29 @@ null..10;   // => Okay
 Range is defined as min-in of Enumerable module, so you can use interfaces of Enumerable.
 
 As a current status, the following interfaces are implemented.
-As for the stuff marked in **''Lazy''**, it is the method which will perform a lazy evaluation after returning an Enumerator object by `lazy()`.
+As for the stuff marked in **''L''**, it is the method which will perform a lazy evaluation after returning an Enumerator object by `lazy()`.
 
 <context label="Table:KinxEnumerable"/>
 <context caption="Enumerable Methods"/>
 <context limit-column="2"/>
 
-|      Method      |                                                      Outline                                                      | Lazy  |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------- | :---: |
-| `filter(f)`      | Filters items for each by items of which the result of `f` is true.                                               |   O   |
-| `map(f)`         | Returns items for each to map by `f`.                                                                             |   O   |
-| `flatMap(f)`     | Returns items to be flatten after mapping by `f`.                                                                 |   O   |
-| `take(n)`        | Returns the fiest `n` items.                                                                                      |   O   |
-| `takeWhile(f)`   | Returns items of while `f` is true.                                                                               |   O   |
-| `drop(n)`        | Drops the fiest `n` items and returns the rest.                                                                   |   O   |
-| `dropWhile(f)`   | Drops items of while `f` is true and returns the rest.                                                            |   O   |
-| `each(f)`        | All items passes to `f`.                                                                                          |   O   |
-| `reduce(f, itr)` | Starts from `itr` and reduces it in order by a result of applying `f`.                                            |       |
-| `sort(f)`        | Sorts items using `f` as a comparison function.                                                                   |       |
-| `all(f)`         | Returns true when all results are true by applying `f` for each.                                                  |       |
-| `any(f)`         | Returns true when at least one of results are true by applying `f` for each.                                      |       |
-| `toArray()`      | Returns items as Array.                                                                                           |       |
-| `println()`      | Prints all items.                                                                                                 |       |
-| `lazy()`         | Returns the object itself after setting functions to be a lazy function for the functions above marked as `Lazy`. |       |
+|      Method      |                                                    Outline                                                     |   L   |
+| ---------------- | -------------------------------------------------------------------------------------------------------------- | :---: |
+| `filter(f)`      | Filters by items of which the result of `f` is true.                                                           |   O   |
+| `map(f)`         | Returns items for each to map by `f`.                                                                          |   O   |
+| `flatMap(f)`     | Returns items to be flatten after mapping by `f`.                                                              |   O   |
+| `take(n)`        | Returns the fiest `n` items.                                                                                   |   O   |
+| `takeWhile(f)`   | Returns items of while `f` is true.                                                                            |   O   |
+| `drop(n)`        | Drops the fiest `n` items and returns the rest.                                                                |   O   |
+| `dropWhile(f)`   | Drops items of while `f` is true and returns the rest.                                                         |   O   |
+| `each(f)`        | All items passes to `f`.                                                                                       |   O   |
+| `reduce(f, itr)` | Reduces results of applying `f`, started with `itr` or null.                                                   |       |
+| `sort(f)`        | Sorts items using `f` as a comparison function.                                                                |       |
+| `all(f)`         | Returns true when all results are true by applying `f` for each.                                               |       |
+| `any(f)`         | Returns true when at least one of results are true by applying `f` for each.                                   |       |
+| `toArray()`      | Returns items as Array.                                                                                        |       |
+| `println()`      | Prints all items.                                                                                              |       |
+| `lazy()`         | Returns the object itself after setting functions to be a lazy function for the functions above marked in `L`. |       |
 
 By the way, note that it could be an infinite loop if you used the range such as an infinite sequence for the function which is not a lazy evaluation.
 
@@ -1121,12 +1121,12 @@ out of range (af)
 Special Object is the object which holds methods to call directly a method for the specific target type, and there are String, Integer, Double, Binary, and Array.
 And also the method itself defined to Special Object and used to call directly a method for the specific target object is called as Special Method.
 
-However, it is never recommended to add Special Method to Special Object because of following poins of view.
+But adding Special Method to Special Object is never recommended because of following points.
 
 * Because **it could be used in the library such as adding an embedded special method**.
-* Because **it could cause a behavior change inside Standard Library and it could not work correctly**.
+* Because **the behavior of Standard Library could be changed and not work correctly**.
 
-It is useful if using this mechanism in a library development, but note for the conflict between libraries.
+It is useful if using this in a library development, but note the conflict between libraries.
 Therefore, this section describes Special Object by the perspective of a mechanism.
 
 ### Example of Special Object
