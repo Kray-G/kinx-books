@@ -18,7 +18,7 @@ This book will let you know the whole image of the purpose and the background, a
 
 To make you realise about the **"Looks like JavaScript, feels like Ruby, it is a scripting language fitting in C programmers"** which is the concept of Kinx, so this book is structured as a person who never use Kinx can understand a whole thing, and a person who has already used Kinx will be also able to find something new.
 
-This book will be sure to make it wider of the width of use.
+This book will be sure to make it wider to utilize Kinx.
 
 <br clear="left"/>
 
