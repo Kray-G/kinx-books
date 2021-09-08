@@ -451,6 +451,31 @@ hello
 See ''\\nameref{Namespace}'' for a namespace.
 Besides, see ''\\nameref{Class}'' for a class, see ''\\nameref{Module}'' for a module.
 
+### Simple Type Annotation
+
+There is a simple type annotation feature in Kinx.
+This is used for the purpose as follows.
+
+* It is mandatory for `native` function whenever types except `int` is used.
+* Only in the limited case, but it finds mismatches between types in compilation.
+
+The followings is the example of `native` function.
+The argument is Double, calculating with Double, and returning Double.
+
+```javascript
+native fibd(n : dbl) : dbl {
+    return n if (n < 3);
+    return fibd(n-2) + fibd(n-1);
+}
+System.println(fibd(34));
+```
+
+```console
+9.22747e+06
+```
+
+See ''\\nameref{Type Annotation}'' for details.
+
 ### Libraries
 
 Kinx provides useful libraries as an all-in-one package.

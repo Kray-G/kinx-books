@@ -14,16 +14,17 @@
 
 <toc with="lof,lot"/>
 
-<include file="jp/section/section01.md" />
-<include file="jp/section/section02.md" />
-<include file="jp/section/section03.md" />
-<include file="jp/section/section04.md" />
-<include file="jp/section/section05.md" />
-<include file="jp/section/section06.md" />
-<include file="jp/section/section07.md" />
-<include file="jp/section/section08.md" />
-<include file="jp/section/section09.md" />
-<include file="jp/section/section10.md" />
+<include file="jp/chapter/chapter01.md" />
+<include file="jp/chapter/chapter02.md" />
+<include file="jp/chapter/chapter03.md" />
+<include file="jp/chapter/chapter04.md" />
+<include file="jp/chapter/chapter05.md" />
+<include file="jp/chapter/chapter06.md" />
+<include file="jp/chapter/chapter07.md" />
+<include file="jp/chapter/chapter08.md" />
+<include file="jp/chapter/chapter09.md" />
+<include file="jp/chapter/chapter10.md" />
+<include file="jp/chapter/chapter11.md" />
 
 <appendix/>
 

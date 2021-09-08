@@ -14,16 +14,17 @@ The Programming Language
 
 <toc with="lof,lot"/>
 
-<include file="en/section/section01.md" />
-<include file="en/section/section02.md" />
-<include file="en/section/section03.md" />
-<include file="en/section/section04.md" />
-<include file="en/section/section05.md" />
-<include file="en/section/section06.md" />
-<include file="en/section/section07.md" />
-<include file="en/section/section08.md" />
-<include file="en/section/section09.md" />
-<include file="en/section/section10.md" />
+<include file="en/chapter/chapter01.md" />
+<include file="en/chapter/chapter02.md" />
+<include file="en/chapter/chapter03.md" />
+<include file="en/chapter/chapter04.md" />
+<include file="en/chapter/chapter05.md" />
+<include file="en/chapter/chapter06.md" />
+<include file="en/chapter/chapter07.md" />
+<include file="en/chapter/chapter08.md" />
+<include file="en/chapter/chapter09.md" />
+<include file="en/chapter/chapter10.md" />
+<include file="en/chapter/chapter11.md" />
 
 <appendix/>
 
