@@ -137,7 +137,7 @@ hello, world.
 ```
 
 As you can see, there is no need for any complicated or cumbersome setup code because Kinx is a scripting language.
-You can focus on what you want to do and run and try it right away.
+You can focus on what you want to do, and you can run and try it right away.
 
 ## Kinx Tour
 
