@@ -20,7 +20,7 @@ To make you realise about the **"Looks like JavaScript, feels like Ruby, it is a
 
 This book will be sure to make it wider of the width of use.
 
-<br clear="right"/>
+<br clear="left"/>
 
 ---
 
