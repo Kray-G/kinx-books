@@ -129,7 +129,7 @@ Binary のほうは `compfunc` が省略された場合に `stdlib.h` の `qsort
 また、`Binary.reverse()` も C ルーチンで実装されています。
 つまり、Binary に対しての降順ソートは `bin.sort(&(a, b) => b <=> a)` よりも `bin.sort().reverse()` としたほうが速い結果が出ます。
 
-```javascript
+```kinx
 function test(name, f) {
     var tmr = new SystemTimer();
     var sorted = f();

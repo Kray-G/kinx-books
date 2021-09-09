@@ -10,7 +10,7 @@
 名前空間内で宣言されたクラス、モジュールは名前空間オブジェクトに設定されます。
 ただし、定数等は名前空間オブジェクトには自動的に設定されないため、自分で設定する必要があります。
 
-```javascript
+```kinx
 namespace N {
     class A {
         ...
@@ -32,7 +32,7 @@ System.println(N.X); // OK
 
 名前空間はネストできます。
 
-```javascript
+```kinx
 namespace A {
 namespace B {
 
@@ -79,7 +79,7 @@ var x = new A.B.X(); // OK
 関数名を演算子名の `+` とするだけです。
 他の演算子でも同じです。
 
-```javascript
+```kinx
 class Sample(value_) {
     @isSample = true;
     @value = value_;
@@ -95,7 +95,7 @@ class Sample(value_) {
 `rhs` として渡されるものは、適宜想定するコンテキストに合わせて場合分けして実装する必要があります。
 先の例のように実装すると、以下のように使えるようになります。
 
-```javascript
+```kinx
 var s1 = new Sample(10);
 var s2 = s1 + 100;
 s1 += 1100;
@@ -107,7 +107,7 @@ System.println(s2.value);  // => 110
 
 尚、オブジェクトに対するメソッド呼び出しなので、次のようにも書けます。
 
-```javascript
+```kinx
 var s1 = new Sample(10);
 var s2 = s1.+(100);
 System.println(s2.value);  // => 110
@@ -124,7 +124,7 @@ System.println(s2.value);  // => 110
 
 実際に、例えば `Range` には実装されており、以下のようなアクセスが可能です。
 
-```javascript
+```kinx
 System.println((2..10)[1]);
 System.println(('b'..'z')[1]);
 ```
@@ -136,7 +136,7 @@ c
 
 `[]` 演算子もメソッド呼び出し風に書くと以下のようになります。
 
-```javascript
+```kinx
 System.println((2..10).[](1));     // => 3
 System.println(('b'..'z').[](1));  // => 'c'
 ```
@@ -147,7 +147,7 @@ System.println(('b'..'z').[](1));  // => 'c'
 C++ のファンクタ（`operator()` を定義したクラス）のような振る舞いをします。
 例えば以下のようにクラス・インスタンスを関数のように見立てて直接 `()` 演算子を適用できます。
 
-```javascript
+```kinx
 class Functor {
     public ()(...a) {
         return System.println(a);
@@ -164,7 +164,7 @@ f(1, 2, 3, 4, 5, 6, 7);
 
 メソッド呼び出し風に書くと以下と同じです。
 
-```javascript
+```kinx
 var f = new Functor();
 f.()(1, 2, 3, 4, 5, 6, 7);
 ```

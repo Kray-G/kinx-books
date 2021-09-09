@@ -160,7 +160,7 @@ System.println("hello, world.");
 
 コメントは C/C++ 形式と Perl のような `#` 形式と両方利用可能です。
 
-```javascript
+```kinx
 /* Comment */
 // Comment
 ```
@@ -176,7 +176,7 @@ System.println("hello, world.");
 初期化子を使って初期化できます。
 初期化子を書かなかった場合、初期値は `null` となります。
 
-```javascript
+```kinx
 var a = 10;
 const b = 100;
 var c;
@@ -189,7 +189,7 @@ System.println([a, b, c]);
 
 `const` を使用した場合、新たなデータの代入はできなくなります（コンパイル・エラー）。
 
-```javascript
+```kinx
 const b = 100;
 b = 10;
 ```
@@ -201,7 +201,7 @@ Error: Can not assign a value to the 'const' variable near the <test.kx>:2
 代入には **分割代入**、**パターンマッチ代入** という方法を使うこともできます。
 宣言文や、関数の引数でも同じスタイルを使えます。
 
-```javascript
+```kinx
 [a, b, , ...c] = [1, 2, 3, 4, 5, 6];
 { x, y } = { x: 20, y: { a: 30, b: 300 } };
 { x: d, y: { a: e, b: 300 } } = { x: 20, y: { a: 30, b: 300 } };
@@ -253,7 +253,7 @@ Kinx では真偽値リテラルの `true`、`false` は単純に整数の 1、0
 式の中で使用すると、`True` オブジェクトは真（true）として評価され、`False` オブジェクトは偽（false）と評価されます。
 整数値とどうしても区別したい場合はそちらを使用してください。
 
-```javascript
+```kinx
 System.println(True ? "true" : "false");
 System.println(False ? "true" : "false");
 ```
@@ -268,7 +268,7 @@ false
 これを使うと、例えば値に応じて `"true"` または `"false"` の文字列を出力できます。
 
 
-```javascript
+```kinx
 System.println(new Boolean(100));
 System.println(new Boolean(0));
 System.println(new Boolean(0.isInteger));
@@ -285,7 +285,7 @@ true
 Kinx では内部的に配列とオブジェクトは同じであり、両方の値を同時に保持できます。
 配列とオブジェクトに関しては、それぞれ「\\nameref{配列}」「\\nameref{オブジェクト}」を参照してください。
 
-```javascript
+```kinx
 var a = { a: 100 };
 a.b = 1_000;
 a["c"] = 10_000;
@@ -312,7 +312,7 @@ System.println(a.c);
 「式」の評価が最終的に完了すると、式全体が特定の値を示します。
 また、その値は変数への代入が可能です。
 
-```javascript
+```kinx
 // 式
 z = 5 + (a * 2) + some(x)
 ```
@@ -330,7 +330,7 @@ z = 5 + (a * 2) + some(x)
 「ブロック文」としては、ブロック（`{ ... }`）、`if-else` などの制御構造があります。
 なお、`if` 文は C 言語と同様にぶら下がり `else` です。
 
-```javascript
+```kinx
 // if 文の例
 if (expression1) {
     return a;   // 式文
@@ -348,7 +348,7 @@ if (expression1) {
 ブロックはスコープを作ります。
 スコープの外側に同名の変数があった場合、その変数は参照できなくなります（シャドーイング）。
 
-```javascript
+```kinx
 var a = 10;
 {
     var a = 100;
@@ -371,7 +371,7 @@ System.println(a);
 
 関数はレキシカル・スコープを持ち、クロージャの利用も可能です。
 
-```javascript
+```kinx
 function func(x) {          // 通常の関数
     return &(y) => x + y;   // 匿名関数、x を束縛したクロージャを返す
 }
@@ -396,7 +396,7 @@ System.println(f(20));      // => 30
 ファイバーで指定する関数内でだけ `yield` が使用できます。
 ファイバー以外で `yield` を使用した場合は、実行時エラー（例外）が送出されます。
 
-```javascript
+```kinx
 var fiber = new Fiber {
     System.println("fiber 1");
     yield;
@@ -426,7 +426,7 @@ main 3
 また、Kinx はオブジェクト指向言語ですので、クラスの定義が可能です。
 一方、モジュールはクラス内に `mixin` することで、複数のクラスに後から共通の機能を追加できる仕組みです。
 
-```javascript
+```kinx
 namespace NS {
     module X {
         public sayHello() {
@@ -465,7 +465,7 @@ Kinx には簡単な型アノテーションの機能があります。
 次の例は `native` 関数での例です。
 引数を Double で受け取り、Double で計算され、結果も Double で返ってきます。
 
-```javascript
+```kinx
 native fibd(n : dbl) : dbl {
     return n if (n < 3);
     return fibd(n-2) + fibd(n-1);

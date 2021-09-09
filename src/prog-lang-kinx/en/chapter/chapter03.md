@@ -24,7 +24,7 @@ The representation format is the same as in the C language and follows the rules
 
 If it is an integer, `.isInteger` property will be true.
 
-```javascript
+```kinx
 var a = 0x10;
 System.println([10, a, 010]);
 System.println(a.isInteger ? "true" : "false");
@@ -41,7 +41,7 @@ If the value comes over the range of 64 bit integers, it is automatically conver
 A big integer can handle any integers and can also handle a very huge value.
 However, big inetger literals are represented only by decimal.
 
-```javascript
+```kinx
 var n = 9223372036854775808;    // big integer
 System.println("%d.isBigInteger = %s" % n % (n.isBigInteger ? "true" : "false"));
 System.println("%d x 2 = %d" % n % (n * 2));
@@ -66,7 +66,7 @@ At first, the range of 64 bit is from -9223372036854775808 to 922337203685477580
 Thus, we starts from about 9223372036854775806 and increasing it.
 After that, let\\apos{}s undo in order.
 
-```javascript
+```kinx
 function disp(n) {
     System.println("%d = %10s %13s"
         % n
@@ -101,7 +101,7 @@ You can see the conversion each other between those is automatically done.
 
 Finally, let\\apos{}s calculate factorials for example of a big integer.
 
-```javascript
+```kinx
 function fact(n) {
     if (n < 1) return 1;
     return n * fact(n-1);
@@ -141,7 +141,7 @@ Moreover, when the result is a real number even with calculating between integer
 
 [^dblexp]: I wonder that I should do it...
 
-```javascript
+```kinx
 var d = 0.5;    // a real number literal
 function eval(f) {
     r = f(3, 2);
@@ -173,7 +173,7 @@ You can easily use String also in Kinx as well.
 It is arounded by a single or a double quotation for a String literal.
 It has a same meaning, but a double quotation should be escaped in a double quoted string, and a single quotation should be escaped in a single quoted string.
 
-```javascript
+```kinx
 var a = "\"aaa\", 'bbb'";
 var b = '"aaa", \'bbb\'';
 System.println(a == b ? "same" : "different");
@@ -188,7 +188,7 @@ same
 The arithmetic operations on strings behave as String.
 Addition is a simple concatenation, multiplication is a concatenation by repetition.
 
-```javascript
+```kinx
 var a = "123456789,";
 System.println(a + a + a);
 System.println(a * 4);
@@ -202,7 +202,7 @@ System.println(a * 4);
 When division is applied to String, the string is concatenated as a path separated by ''`/`''.
 In this case, duplicated ''`/`'' will be combined into one.
 
-```javascript
+```kinx
 var a = "path/to";
 System.println(a / "file.txt");
 System.println(a / "/file.txt");
@@ -215,7 +215,7 @@ path/to/file.txt
 
 It also returns a formatter object if the remainder operation is applied.
 
-```javascript
+```kinx
 System.println("0x%02x" % 10);
 ```
 
@@ -231,7 +231,7 @@ See ''\\nameref{Formatting}'' for details.
 When accessing String by index, it returns an integer as a character code at that place.
 Therefore, if you want to check if the fifth character is `'a'`, you have to write the following.
 
-```javascript
+```kinx
 if (str[5] == 'a'[0]) {
     /* ... */
 }
@@ -251,7 +251,7 @@ The return value is a set of a matched group, but otherwise, it will be a `False
 
 [^regex]: See ''\\nameref{Regular Expression}'' for a regular expression.
 
-```javascript
+```kinx
 if (g = ("abc" =~ /(.)(bc)/)) {
     g.each { => System.println(_1) };
 }
@@ -272,7 +272,7 @@ If it is not a regular expression in RHS, an exception will be thrown.
 The return value is true or false.
 If not matching, it should be true.
 
-```javascript
+```kinx
 if ("axc" !~ /(.)(bc)/) {
     System.println("not matched");
 }
@@ -289,7 +289,7 @@ Even in this case, it is a same behavior even with exchanging LHS and RHS as wel
 When applying a unary `*` operator to String, it converts String to Array.
 If you apply it to Array oppositely, it will return back to the String.
 
-```javascript
+```kinx
 var a = *"abc";
 var b = *a;
 System.println(a);
@@ -308,7 +308,7 @@ See ''\\nameref{Conversion Between Types}'' for details.
 
 You can write an expression internally inside String with `%{...}` style.
 
-```javascript
+```kinx
 for (var i = 0; i < 5; ++i) {
     System.println("i = %{i}, i * 2 = %{i * 2}");
 }
@@ -332,7 +332,7 @@ See example below.
 
 [^rawstr]: This can be used like Here Document, so Kinx does not support Here Documment.
 
-```javascript
+```kinx
 var a = 100, b = 10;
 var str1 = %{
 This is a string without escaping control characters.
@@ -378,7 +378,7 @@ In that case, the start character and the end character should be the same, for 
 
 The ''`%`'' operator on strings will create a formatter object.
 
-```javascript
+```kinx
 var fmt = "This is %1%, I can do %2%.";
 System.println(fmt % "Tom" % "cooking");
 ```
@@ -390,7 +390,7 @@ This is Tom, I can do cooking.
 The `1` of `%1%` menas the number of a place holder, and it will be formatted in order of applying values by `%` operator.
 If the order of applying is the same order of format characters, you can use a format character such as ''`%s`'' as well as a printf in C.
 
-```javascript
+```kinx
 var fmt = "This is %s, and %d years old, I like %s.";
 System.println(fmt % "Tom" % 22 % "cooking");
 ```
@@ -403,7 +403,7 @@ Moreover, you can combine the format character and a place holder into one with 
 
 For example, you can write it as follows.
 
-```javascript
+```kinx
 var fmt = "This is %2%, I am 0x%1$02x years old in hex.";
 System.println(fmt % 27 % "John");
 ```
@@ -414,7 +414,7 @@ This is John, I am 0x1b years old in hex.
 
 You can also use `%=` to add values after created a formatter object.
 
-```javascript
+```kinx
 var fmt = "This is %1%, I can do %2%.";
 fmt %= "Tom";
 fmt %= "cooking";
@@ -432,7 +432,7 @@ Actual formatting action will be performed at the following timing.
 
 If you expressly want to create a formatted string from a formatter object, use a `format()` method.
 
-```javascript
+```kinx
 var fmt = "This is %1%, I can do %2%.";
 fmt %= "Tom";
 fmt %= "cooking";
@@ -452,7 +452,7 @@ You can specify foreground colors, background colors, and some decorations.
 
 To specify a foreground and background color, do it like the foloowing.
 
-```javascript
+```kinx
 System.println("The text".red(.white));
 ```
 
@@ -480,7 +480,7 @@ See ''\\nameref{Table:KinxStringColors}'' about a list of colors you can specify
 
 You can specify decorations as well as colors.
 
-```javascript
+```kinx
 System.println("The text".red(.white).bold().underline());
 ```
 
@@ -518,7 +518,7 @@ And also you can put a comma as `,` after the last item.
 This is the purpose as well as C, which it is easy to write items in a vertical way.
 When the comma can be put after the last item, it is easy to sort of items or to add an item later in a source code.
 
-```javascript
+```kinx
 var a = [1, 2, 3, 4, 5];
 var b = [
     "item1",
@@ -532,7 +532,7 @@ var b = [
 
 Array can be accessed by index.
 
-```javascript
+```kinx
 var a = [1, 2, 3];
 var b = [a, 1, 2];
 System.println(b[0][1]);
@@ -556,7 +556,7 @@ Array can be copied by a spread operator.
 But this operator is doing ''shallow copy''.
 This example shows that rewriting the value of `val[2][1]` causes also to change `ary[0][1]`.
 
-```javascript
+```kinx
 var ary = [[1, 2], 1, 2, 3, 4];
 var val = [10, 20, ...ary, 30, 40];
 val[2][1] = 200;
@@ -572,13 +572,13 @@ System.println(val);
 The structure of Array can be used in LHS and it can retrive the values correcponding to the same index.
 You can swap values in this way.
 
-```javascript
+```kinx
 [a, b] = [b, a];    // Swap
 ```
 
 Deconstructing assignment is also availbale with a rest operator.
 
-```javascript
+```kinx
 var [a, ...b] = [1, 2, 3, 4, 5];
 System.println("a = ", a);
 System.println("b = ", b);
@@ -600,7 +600,7 @@ All items are adjusted in the range from 0x00 to 0xFF, and it can be accessed li
 
 Binary litral is described in `<...>` style.
 
-```javascript
+```kinx
 var bin = <0x01, 0x02, 0x03, 0x04>;
 System.println(bin);
 ```
@@ -613,7 +613,7 @@ System.println(bin);
 
 Binary can be copied by a spread operator.
 
-```javascript
+```kinx
 var bin = <0x01, 0x02, 0x03, 0x04>;
 var val = <0x10, 0x20, ...bin, 0x30, 0x40>;
 System.println(val);
@@ -625,7 +625,7 @@ System.println(val);
 
 Moreover, Binary and Array can be divided and combined each other by a spread operator.
 
-```javascript
+```kinx
 var bin = <0x01, 0x02, 0x03, 0x04>;
 var ary = [...bin];
 System.println(ary);
@@ -647,7 +647,7 @@ However, note that a value will be truncated to the range from 0x00 to 0xFF at t
 Binary can be accessed by index as well.
 The negative value also means that it is accessed from the tail of Binary.
 
-```javascript
+```kinx
 var a = <1, 2, 3>;
 System.println(a[1]);
 System.println(a[-1]);
@@ -682,7 +682,7 @@ See below for some differences from a pure JSON.
 
 You can write Object as below when those above are used in combination.
 
-```javascript
+```kinx
 var x = 10, y = 100;
 var obj = {
     a: x + 1,
@@ -702,7 +702,7 @@ System.println(obj);
 Object is an associative array, so you can access an item by a string index.
 Moreover, `obj["a"]` can be written also as `obj.a`.
 
-```javascript
+```kinx
 var obj = { a: 100, b: 200, c: [1, 2] };
 System.println(obj["a"]);
 System.println(obj.a);
@@ -719,7 +719,7 @@ Object can be copied by a spread operator.
 But this operator is doing ''shallow copy''.
 This example shows that rewriting the value of `val.c[0]` causes also to change `obj.c[0]`.
 
-```javascript
+```kinx
 var obj = { a: 100, b: 200, c: [1, 2] };
 var val = { ...obj, e: 400, f: 500};
 val.c[0] = 10;
@@ -736,7 +736,7 @@ The structure of Object can be used in LHS and it can retrive the values correcp
 This is a deconstructing assignment for Object.
 
 
-```javascript
+```kinx
 { a, b, x: c } = { a: 100, b: 200, x: 300 };
 System.println({ a, b, c });
 ```
@@ -748,7 +748,7 @@ System.println({ a, b, c });
 This way of assignment can be also used in a declaration or a function argument.
 By the way, null will be assiged when the key is missing.
 
-```javascript
+```kinx
 var obj = { a: 100, b: 200, x: 300 };
 var { a, b, x: c } = obj;
 System.println({ a, b, c });
@@ -773,7 +773,7 @@ Regular expression literal is represented with `/.../` style.
 In this literal, no escape is necessary except for `/`.
 The escape of ''`\`'' is needed only for ''`/`'' in the literal.
 
-```javascript
+```kinx
 /ab+[\t\n]/
 ```
 
@@ -781,7 +781,7 @@ Moreover, this is a same meaning as below.
 When it is a string literal, escaping is needed such as a new line.
 When it is a raw string, no escape is needed.
 
-```javascript
+```kinx
 new Regex("ab+[\\t\\n]");  // same as /ab+[\t\n]/
 new Regex(%|ab+[\t\n]|);   // same as /ab+[\t\n]/
 ```
@@ -793,13 +793,13 @@ Therefore, you can also write it like the following[^regexpat].
 
 [^regexpat]: If we are asked that it can be, we do not know.
 
-```javascript
+```kinx
 %m1ab+[\t\n]1  // same as /ab+[\t\n]/
 ```
 
 If you use a bracket, the closing bracket have to be used corresponding to the opening bracket.
 
-```javascript
+```kinx
 %m<ab+[\t\n]>  // same as /ab+[\t\n]/
 %m(ab+[\t\n])  // same as /ab+[\t\n]/
 ```
@@ -812,7 +812,7 @@ A regular expression object can be used in the argument of following String meth
 
 `String.replace()` can use a regular expression as a condition to be replaced.
 
-```javascript
+```kinx
 var s = "xabbbbbcabbc".replace(/ab+/, ",");
 System.println(s);
 ```
@@ -825,7 +825,7 @@ x,c,c
 
 `String.find()` can use a regular expression as a condition to search.
 
-```javascript
+```kinx
 System.println("abcdefg".find("cd"));
 System.println("abcdefg".find(/cd/));
 ```
@@ -842,7 +842,7 @@ When using a regular expression for a condition, it returns an array of a found 
 
 `String.split()` can use a regular expression as a condition of a separator.
 
-```javascript
+```kinx
 var s = "xabbbbbcabbc".split(/ab+/);
 s.each(&(e) => System.println(e));
 ```
@@ -857,7 +857,7 @@ c
 
 This section shows a basic usage of a regular expression.
 
-```javascript
+```kinx
 var a = "111/aaa/bbb/ccc/ddd";
 while (group = (a =~ /\w+\//)) {
     for (var i = 0, len = group.length(); i < len; ++i) {
@@ -880,7 +880,7 @@ When there are a lot of ''`/`'' in the regular expression, you can use `%m` to a
 For example, it is like `%m(...)`.
 By this way, you can rewrite the above example as below.
 
-```javascript
+```kinx
 var a = "111/aaa/bbb/ccc/ddd";
 while (group = (a =~ %m(\w+/))) {
     for (var i = 0, len = group.length(); i < len; ++i) {
@@ -899,7 +899,7 @@ There is a note when you use a regular expression in a condition like `while`.
 For example, if you write it below, the loop will be performed with a group holding captures until matching has been ended.
 In that case, if you break the loop with like `break` before finished, there is a case that a target string of a regular expression can not be reset correctly.
 
-```javascript
+```kinx
 while (group = (str =~ /ab+/)) {
     /* block */
     if (expr) {
@@ -928,7 +928,7 @@ Range is a Range object which is an instance of a Range class, which shows the m
 Range object can be created as below.
 The created instance holds a range from some value to some value according to your specified.
 
-```javascript
+```kinx
 new Range(Start, End, ExclusiveFlag)
 ```
 
@@ -939,14 +939,14 @@ You can also write a Range with a dot style.
 With 2 dots, it includes the end.
 With 3 dots, it is the range which does not include the end.
 
-```javascript
+```kinx
 var a = 2..10;  // new Range(2, 10)
 var b = 2...10; // new Range(2, 10, true)
 ```
 
 `Start` and `End` can be also represented by a variable or an expression.
 
-```javascript
+```kinx
 function makeRange(begin, len) {
     return begin..(begin+len);
 }
@@ -961,14 +961,14 @@ System.println(makeRange(100, 2).end());
 
 You can also define the range of strings.
 
-```javascript
+```kinx
 var a = "a".."z";     // new Range("a", "z")
 var b = "ab"..."ax";  // new Range("ab", "ax", true)
 ```
 
 There is no differences between a double-quoted and a single-quoted.
 
-```javascript
+```kinx
 var l = 'a'..'g';  // 'a', 'b', 'c', ..., 'g'
 l.each { => System.println(_1) };
 ```
@@ -987,7 +987,7 @@ g
 
 Range can deal with also the range of dates.
 
-```javascript
+```kinx
 using DateTime;
 var l = DateTime("2000/1/1")..DateTime("2000/1/6");
 l.each { => System.println(_1.format("%MMMM% %DD%, %YYYY%")) };
@@ -1010,7 +1010,7 @@ For example, `1..` will show a natural number.
 But the start value cannot be omitted.
 If you really want to omit it, use null instead.
 
-```javascript
+```kinx
 1..;        // => Okay
 1...;       // => Okay
 ..10;       // => error
@@ -1055,7 +1055,7 @@ You can use Range at `case` or `when` in `switch-case/when`.
 It checks if the value is inside the range you specified.
 Here is the sample that the number is specified.
 
-```javascript
+```kinx
 for (var i = 0; i <= 10; ++i) {
     switch (i) {
     when 1..4:
@@ -1084,7 +1084,7 @@ out of range (10)
 
 The next one is the sample of specifying it as a string.
 
-```javascript
+```kinx
 for (var i in 's'..'af') {
     switch (i) {
     when 'ac'..'ae':
@@ -1133,7 +1133,7 @@ Therefore, this section describes Special Object by the perspective of a mechani
 
 For example, let\\apos{}' define the function below to the Special Object of `String`.
 
-```javascript
+```kinx
 String.greeting = function(name) {
     System.println("Hello, I am %{name}.");
 };
@@ -1141,7 +1141,7 @@ String.greeting = function(name) {
 
 After that, you can write it as below.
 
-```javascript
+```kinx
 "John".greeting();
 ```
 

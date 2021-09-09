@@ -128,7 +128,7 @@ For example, both `Array.sort(ary, compfunc)` and `Binary.sort(bin, compfunc)` i
 And `Binary.reverse()` is also implemented in C.
 Therefore, as for the reverse sort to Binary, `bin.sort().reverse()` is faster than `bin.sort(&(a, b) => b <=> a)`.
 
-```javascript
+```kinx
 function test(name, f) {
     var tmr = new SystemTimer();
     var sorted = f();

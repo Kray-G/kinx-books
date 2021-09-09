@@ -158,7 +158,7 @@ System.println("hello, world.");
 
 As a comment, you can use both a C and C++ style and `#` of a Perl like style.
 
-```javascript
+```kinx
 /* Comment */
 // Comment
 ```
@@ -174,7 +174,7 @@ You can use it as you like.
 It can have an initializer to initialize a variable.
 If there is no initializer, the initial value of a variable is null.
 
-```javascript
+```kinx
 var a = 10;
 const b = 100;
 var c;
@@ -187,7 +187,7 @@ System.println([a, b, c]);
 
 When using `const`, you can not assign a new value to the variable after declaration with compiling error.
 
-```javascript
+```kinx
 const b = 100;
 b = 10;
 ```
@@ -199,7 +199,7 @@ Error: Can not assign a value to the 'const' variable near the <test.kx>:2
 As an assignment, you can use the way of a **deconstructing assignment**, or a **pattern matching assignment**.
 Of course, it can be used at not only an assignment but also a declaration statement or arguments of a function.
 
-```javascript
+```kinx
 [a, b, , ...c] = [1, 2, 3, 4, 5, 6];
 { x, y } = { x: 20, y: { a: 30, b: 300 } };
 { x: d, y: { a: e, b: 300 } } = { x: 20, y: { a: 30, b: 300 } };
@@ -250,7 +250,7 @@ However, there is not a Boolean type but a Boolean class, and the constant value
 When it were used in an expression, `True` would be evaluated as true, and `False` would be also evaluated as false.
 If you really want to use a boolean type not as an integer, use it instead.
 
-```javascript
+```kinx
 System.println(True ? "true" : "false");
 System.println(False ? "true" : "false");
 ```
@@ -266,7 +266,7 @@ If the value were not 0, the instance same as `True` would be created.
 You can use this, for example, when you want to show the `"true"` or `"false"` string.
 
 
-```javascript
+```kinx
 System.println(new Boolean(100));
 System.println(new Boolean(0));
 System.println(new Boolean(0.isInteger));
@@ -283,7 +283,7 @@ true
 Internally, arrays and objects are the same in Kinx, and it can hold both values at the same time.
 See ''\\nameref{Array}'' for Array, and see ''\\nameref{Object}'' for Object.
 
-```javascript
+```kinx
 var a = { a: 100 };
 a.b = 1_000;
 a["c"] = 10_000;
@@ -310,7 +310,7 @@ An expression is used to perform arithmetic operations, function calls, object m
 When the expression has been finally evaluated, the whole expression shows a specific value.
 The value can also be assigned to a variable.
 
-```javascript
+```kinx
 // expression
 z = 5 + (a * 2) + some(x)
 ```
@@ -327,7 +327,7 @@ As an expression statement, there are a declaration, an assignment, `continue`, 
 The end of an expression statement needs a semi-colon of ''`;`''.
 By the way, `if` block is the same as C syntax, and it is a dangling `else`.
 
-```javascript
+```kinx
 // Example of if
 if (expression1) {
     return a;   // expression statement
@@ -346,7 +346,7 @@ A block creates a scope.
 If there is a variable with the same name outside the scope, the variable will not be able to be referenced.
 This is called *shadowing*.
 
-```javascript
+```kinx
 var a = 10;
 {
     var a = 100;
@@ -369,7 +369,7 @@ There are a normal function, a `native` function, a closure, a lambda, a method 
 
 A function has a lexical scope, and you can use a closure.
 
-```javascript
+```kinx
 function func(x) {          // a regular function
     return &(y) => x + y;   // a lambda, returns a closure binding 'x'
 }
@@ -393,7 +393,7 @@ Fiber uses the `yield` statement for continuation, but this `yield` statement ca
 You can only use `yield` in the function in Fiber.
 If you use `yield` outside of Fiber, a runtime error as exception will be thrown.
 
-```javascript
+```kinx
 var fiber = new Fiber {
     System.println("fiber 1");
     yield;
@@ -423,7 +423,7 @@ You can use a namespace.
 Moreover, you can define a class because Kinx is object oriented language.
 One more thing, Module is introduced as a mechanism to add common functions later to a class by `mixin`.
 
-```javascript
+```kinx
 namespace NS {
     module X {
         public sayHello() {
@@ -462,7 +462,7 @@ This is used for the purpose as follows.
 The followings is the example of `native` function.
 The argument is Double, calculating with Double, and returning Double.
 
-```javascript
+```kinx
 native fibd(n : dbl) : dbl {
     return n if (n < 3);
     return fibd(n-2) + fibd(n-1);

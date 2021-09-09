@@ -26,7 +26,7 @@ Kinx では基本的に整数は 64 bit 整数です。
 
 値が整数の場合、`.isInteger` が true になります。
 
-```javascript
+```kinx
 var a = 0x10;
 System.println([10, a, 010]);
 System.println(a.isInteger ? "true" : "false");
@@ -43,7 +43,7 @@ true
 多倍長整数は基本的にどんな数でも扱え、非常に大きい値を扱うことができます。
 ただし、多倍長整数をリテラルで記述する際は 10 進数のみが利用可能です。
 
-```javascript
+```kinx
 var n = 9223372036854775808;    // 多倍長整数
 System.println("%d.isBigInteger = %s" % n % (n.isBigInteger ? "true" : "false"));
 System.println("%d x 2 = %d" % n % (n * 2));
@@ -68,7 +68,7 @@ System.println("%d x 2 = %d" % n % (n * 2));
 まず、64 bit 整数の値の範囲は -9223372036854775808 から 9223372036854775807 までとなります。
 そこで、9223372036854775806 あたりからプラスの方向に増やし、その後、順に元に戻してみます。
 
-```javascript
+```kinx
 function disp(n) {
     System.println("%d = %10s %13s"
         % n
@@ -102,7 +102,7 @@ for (var i = 0; i < 4; ++i, --n) {
 
 最後に多倍長整数の例として、階乗の計算をしてみましょう。
 
-```javascript
+```kinx
 function fact(n) {
     if (n < 1) return 1;
     return n * fact(n-1);
@@ -143,7 +143,7 @@ System.println(fact(500));
 
 [^dblexp]: このくらい対応したほうが良いか。。。
 
-```javascript
+```kinx
 var d = 0.5;    // 実数リテラル
 function eval(f) {
     r = f(3, 2);
@@ -177,7 +177,7 @@ Kinx でも同様に文字列を容易に扱えます。
 文字列のリテラルは、ダブルクォート、またはシングルクォートで囲みます。
 意味は同じですが、ダブルクォート内ではダブルクォートを、シングルクォート内ではシングルクォートをエスケープする必要があります。
 
-```javascript
+```kinx
 var a = "\"aaa\", 'bbb'";
 var b = '"aaa", \'bbb\'';
 System.println(a == b ? "same" : "different");
@@ -193,7 +193,7 @@ same
 まず、加算と乗算は以下のように動作します。
 加算は単純な文字列の連結、乗算は文字列の繰り返し（の連結）です。
 
-```javascript
+```kinx
 var a = "123456789,";
 System.println(a + a + a);
 System.println(a * 4);
@@ -207,7 +207,7 @@ System.println(a * 4);
 文字列に除算を適用すると、文字列を「`/`」で区切ったパスとして連結します。
 この時、重複する「`/`」は一つにまとめられます。
 
-```javascript
+```kinx
 var a = "path/to";
 System.println(a / "file.txt");
 System.println(a / "/file.txt");
@@ -220,7 +220,7 @@ path/to/file.txt
 
 また、剰余演算を適用した場合、フォーマッタ・オブジェクトを返します。
 
-```javascript
+```kinx
 System.println("0x%02x" % 10);
 ```
 
@@ -237,7 +237,7 @@ System.println("0x%02x" % 10);
 その位置にある文字コードを整数値で返します。
 したがって、「5 文字目が `'a'` である」という判断をする場合は以下のように書きます。
 
-```javascript
+```kinx
 if (str[5] == 'a'[0]) {
     /* ... */
 }
@@ -258,7 +258,7 @@ if (str[5] == 'a'[0]) {
 
 [^regex]: 正規表現に関しては「\\nameref{正規表現}」を参照ください。
 
-```javascript
+```kinx
 if (g = ("abc" =~ /(.)(bc)/)) {
     g.each { => System.println(_1) };
 }
@@ -279,7 +279,7 @@ if (g = ("abc" =~ /(.)(bc)/)) {
 復帰値は true または false になります。
 true の場合が、マッチしなかった場合です。
 
-```javascript
+```kinx
 if ("axc" !~ /(.)(bc)/) {
     System.println("not matched");
 }
@@ -296,7 +296,7 @@ not matched
 単項 `*` 演算子を文字列に適用した場合、文字列を配列に変換します。
 また、逆に配列に単項 `*` 演算子を適用すると、文字列に戻ってきます。
 
-```javascript
+```kinx
 var a = *"abc";
 var b = *a;
 System.println(a);
@@ -315,7 +315,7 @@ abc
 
 文字列の内部で `%{...}` 形式を使うと、文字列内部に直接式を記述することができます。
 
-```javascript
+```kinx
 for (var i = 0; i < 5; ++i) {
     System.println("i = %{i}, i * 2 = %{i * 2}");
 }
@@ -338,7 +338,7 @@ i = 4, i * 2 = 8
 
 [^rawstr]: ヒアドキュメントのように扱えるため、Kinx ではヒアドキュメントをサポートしていません。
 
-```javascript
+```kinx
 var a = 100, b = 10;
 var str1 = %{
 This is a string without escaping control characters.
@@ -386,7 +386,7 @@ Variable a is 100 and b is 10.
 
 文字列に対する `%` 演算子は、フォーマッタ・オブジェクトを作成します。
 
-```javascript
+```kinx
 var fmt = "This is %1%, I can do %2%.";
 System.println(fmt % "Tom" % "cooking");
 ```
@@ -398,7 +398,7 @@ This is Tom, I can do cooking.
 `%1%` の `1` はプレースホルダ番号を示し、`%` 演算子で適用した順に合わせて整形します。
 適用場所が順序通りであれば、`%s` といった C の printf と同様の指定の仕方も可能です。
 
-```javascript
+```kinx
 var fmt = "This is %s, and %d years old, I like %s.";
 System.println(fmt % "Tom" % 22 % "cooking");
 ```
@@ -412,7 +412,7 @@ This is Tom, and 22 years old, I like cooking.
 
 例えば、16進数で表示したい場合は以下のようにします。
 
-```javascript
+```kinx
 var fmt = "This is %2%, I am 0x%1$02x years old in hex.";
 System.println(fmt % 27 % "John");
 ```
@@ -423,7 +423,7 @@ This is John, I am 0x1b years old in hex.
 
 フォーマッタ・オブジェクトに後から値を適用していく場合は、`%=` 演算子を使って適用していきます。
 
-```javascript
+```kinx
 var fmt = "This is %1%, I can do %2%.";
 fmt %= "Tom";
 fmt %= "cooking";
@@ -441,7 +441,7 @@ This is Tom, I can do cooking.
 
 明示的にフォーマッタ・オブジェクトからフォーマット文字列を作成するには、`format()` メソッドを使います。
 
-```javascript
+```kinx
 var fmt = "This is %1%, I can do %2%.";
 fmt %= "Tom";
 fmt %= "cooking";
@@ -462,7 +462,7 @@ Kinx ではこれを実現するために、文字列に対して直接メソッ
 
 以下のような形で指定すると、前景色を赤色に、背景色を黄色に設定します。
 
-```javascript
+```kinx
 System.println("The text".red(.white));
 ```
 
@@ -490,7 +490,7 @@ System.println("The text".red(.white));
 
 文字装飾も文字色と同様に指定します。
 
-```javascript
+```kinx
 System.println("The text".red(.white).bold().underline());
 ```
 
@@ -529,7 +529,7 @@ System.println("The text".red(.white).bold().underline());
 最後の要素の後にカンマが置けると、
 ソースコード上での並べ替えや要素の追加が容易になります。
 
-```javascript
+```kinx
 var a = [1, 2, 3, 4, 5];
 var b = [
     "item1",
@@ -543,7 +543,7 @@ var b = [
 
 配列は添え字でアクセスできます。
 
-```javascript
+```kinx
 var a = [1, 2, 3];
 var b = [a, 1, 2];
 System.println(b[0][1]);
@@ -569,7 +569,7 @@ System.println(a[-1]);
 ただし、このコピーは ''浅いコピー'' となります。
 この例では `val[2][1]` を書き換えることで `ary[0][1]` も書き換わっていることが分かります。
 
-```javascript
+```kinx
 var ary = [[1, 2], 1, 2, 3, 4];
 var val = [10, 20, ...ary, 30, 40];
 val[2][1] = 200;
@@ -585,13 +585,13 @@ System.println(val);
 配列構造は左辺値で使用すると右辺値の配列を個々の変数に取り込むことが可能です。
 これを使用して値をスワップすることも可能です。
 
-```javascript
+```kinx
 [a, b] = [b, a];    // Swap
 ```
 
 スプレッド・レスト演算子を使った分割代入も可能です。
 
-```javascript
+```kinx
 var [a, ...b] = [1, 2, 3, 4, 5];
 System.println("a = ", a);
 System.println("b = ", b);
@@ -613,7 +613,7 @@ b = [2, 3, 4, 5]
 
 バイナリ・リテラルは `<...>` の形式で記述します。
 
-```javascript
+```kinx
 var bin = <0x01, 0x02, 0x03, 0x04>;
 System.println(bin);
 ```
@@ -626,7 +626,7 @@ System.println(bin);
 
 スプレッド演算子でバイナリ列をコピーできます。
 
-```javascript
+```kinx
 var bin = <0x01, 0x02, 0x03, 0x04>;
 var val = <0x10, 0x20, ...bin, 0x30, 0x40>;
 System.println(val);
@@ -638,7 +638,7 @@ System.println(val);
 
 また、バイナリと配列は相互にスプレッド演算子で分割、結合することが可能です。
 
-```javascript
+```kinx
 var bin = <0x01, 0x02, 0x03, 0x04>;
 var ary = [...bin];
 System.println(ary);
@@ -660,7 +660,7 @@ System.println(bin);
 バイナリも配列同様に添え字でアクセスできます。
 また、同様に添え字に負の数を指定すると末尾からアクセスするように動作します。
 
-```javascript
+```kinx
 var a = <1, 2, 3>;
 System.println(a[1]);
 System.println(a[-1]);
@@ -695,7 +695,7 @@ System.println(a[-1]);
 
 これらを組み合わせると、次のような記述が可能です。
 
-```javascript
+```kinx
 var x = 10, y = 100;
 var obj = {
     a: x + 1,
@@ -716,7 +716,7 @@ System.println(obj);
 配列同様の形で、添え字を文字列にすることでアクセスできます。
 また、`obj["a"]` は `obj.a` とも書けます。
 
-```javascript
+```kinx
 var obj = { a: 100, b: 200, c: [1, 2] };
 System.println(obj["a"]);
 System.println(obj.a);
@@ -733,7 +733,7 @@ System.println(obj.a);
 ただし、このコピーは ''浅いコピー'' となります。
 この例では `val.c[0]` を書き換えることで `obj.c[0]` も書き換わっていることが分かります。
 
-```javascript
+```kinx
 var obj = { a: 100, b: 200, c: [1, 2] };
 var val = { ...obj, e: 400, f: 500};
 val.c[0] = 10;
@@ -749,7 +749,7 @@ System.println(val);
 オブジェクトの分割代入も可能です。
 キーに対応する値が変数に代入されます。
 
-```javascript
+```kinx
 { a, b, x: c } = { a: 100, b: 200, x: 300 };
 System.println({ a, b, c });
 ```
@@ -761,7 +761,7 @@ System.println({ a, b, c });
 この代入方法は宣言や関数の引数でも利用できます。
 なお、キーが存在しない場合は null が設定されます。
 
-```javascript
+```kinx
 var obj = { a: 100, b: 200, x: 300 };
 var { a, b, x: c } = obj;
 System.println({ a, b, c });
@@ -786,7 +786,7 @@ check(obj);
 この中では `/` 以外、例えば改行コードなどにエスケープを行う必要はありません。
 リテラル内の「`/`」のみ「`\`」でエスケープする必要があります。
 
-```javascript
+```kinx
 /ab+[\t\n]/
 ```
 
@@ -794,7 +794,7 @@ check(obj);
 この書き方の場合、改行などもエスケープが必要です。
 Raw 文字列の書き方であればエスケープは不要です。
 
-```javascript
+```kinx
 new Regex("ab+[\\t\\n]");  // same as /ab+[\t\n]/
 new Regex(%|ab+[\t\n]|);   // same as /ab+[\t\n]/
 ```
@@ -806,13 +806,13 @@ new Regex(%|ab+[\t\n]|);   // same as /ab+[\t\n]/
 
 [^regexpat]: できたほうが良いのかと言われると、そうでもありませんが。
 
-```javascript
+```kinx
 %m1ab+[\t\n]1  // same as /ab+[\t\n]/
 ```
 
 囲み文字としてカッコを使う場合は対応する閉じカッコで対応させるように記述します。
 
-```javascript
+```kinx
 %m<ab+[\t\n]>  // same as /ab+[\t\n]/
 %m(ab+[\t\n])  // same as /ab+[\t\n]/
 ```
@@ -826,7 +826,7 @@ new Regex(%|ab+[\t\n]|);   // same as /ab+[\t\n]/
 
 `String.replace()` 関数は、変換元の文字列条件を正規表現で指定することが可能です。
 
-```javascript
+```kinx
 var s = "xabbbbbcabbc".replace(/ab+/, ",");
 System.println(s);
 ```
@@ -839,7 +839,7 @@ x,c,c
 
 `String.find()` 関数は、検索文字列として正規表現を指定することが可能です。
 
-```javascript
+```kinx
 System.println("abcdefg".find("cd"));
 System.println("abcdefg".find(/cd/));
 ```
@@ -856,7 +856,7 @@ System.println("abcdefg".find(/cd/));
 
 `String.split()` 関数は、区切り文字列を正規表現で指定することが可能です。
 
-```javascript
+```kinx
 var s = "xabbbbbcabbc".split(/ab+/);
 s.each(&(e) => System.println(e));
 ```
@@ -871,7 +871,7 @@ c
 
 正規表現の基本的な使い方の例を示します。
 
-```javascript
+```kinx
 var a = "111/aaa/bbb/ccc/ddd";
 while (group = (a =~ /\w+\//)) {
     for (var i = 0, len = group.length(); i < len; ++i) {
@@ -894,7 +894,7 @@ found[12,16) = ccc/
 例えば `%m(...)` といった記述が可能です。
 これを使って先の例を書き直すと、次のようになります。
 
-```javascript
+```kinx
 var a = "111/aaa/bbb/ccc/ddd";
 while (group = (a =~ %m(\w+/))) {
     for (var i = 0, len = group.length(); i < len; ++i) {
@@ -914,7 +914,7 @@ while (group = (a =~ %m(\w+/))) {
 その際、最後のマッチまで実行せずに途中で `break` 等でループを抜けると、
 正規表現リテラルの対象文字列が次回のループで正しくリセットされない場合があります。
 
-```javascript
+```kinx
 while (group = (str =~ /ab+/)) {
     /* block */
     if (expr) {
@@ -946,7 +946,7 @@ while (group = (str =~ /ab+/)) {
 Range オブジェクトは以下のように構築できます。
 作成されたインスタンスは、指定された値に従って「ある値からある値まで」の範囲を示します。
 
-```javascript
+```kinx
 new Range(初値, 終値, 終値除外フラグ)
 ```
 
@@ -957,14 +957,14 @@ Range はドット記法で記載することもできます。
 ドット 2 つの場合は終端を含みます。
 ドットを 3 つにすると、終端を含まない範囲となります。
 
-```javascript
+```kinx
 var a = 2..10;  // new Range(2, 10)
 var b = 2...10; // new Range(2, 10, true)
 ```
 
 初値、終値の部分には、変数や式も使うことができます。
 
-```javascript
+```kinx
 function makeRange(begin, len) {
     return begin..(begin+len);
 }
@@ -979,14 +979,14 @@ System.println(makeRange(100, 2).end());
 
 文字列の範囲も定義できます。
 
-```javascript
+```kinx
 var a = "a".."z";     // new Range("a", "z")
 var b = "ab"..."ax";  // new Range("ab", "ax", true)
 ```
 
 ダブルクォートでもシングルクォートでも同じ意味です。
 
-```javascript
+```kinx
 var l = 'a'..'g';  // 'a', 'b', 'c', ..., 'g'
 l.each { => System.println(_1) };
 ```
@@ -1005,7 +1005,7 @@ g
 
 日付も範囲で扱えます。
 
-```javascript
+```kinx
 using DateTime;
 var l = DateTime("2000/1/1")..DateTime("2000/1/6");
 l.each { => System.println(_1.format("%MMMM% %DD%, %YYYY%")) };
@@ -1028,7 +1028,7 @@ January 06, 2000
 ただし、初値は省略できません。
 どうしても省略したい場合は、null を使用します。
 
-```javascript
+```kinx
 1..;        // => Okay
 1...;       // => Okay
 ..10;       // => error
@@ -1075,7 +1075,7 @@ Enumerable のインタフェースが利用できます。
 指定した範囲にマッチするか確認します。
 次の例は数値で指定した例です。
 
-```javascript
+```kinx
 for (var i = 0; i <= 10; ++i) {
     switch (i) {
     when 1..4:
@@ -1104,7 +1104,7 @@ out of range (10)
 
 次の例は文字列で指定した例です。
 
-```javascript
+```kinx
 for (var i in 's'..'af') {
     switch (i) {
     when 'ac'..'ae':
@@ -1155,7 +1155,7 @@ String、Integer、Double、Binary、Array があります。
 
 例えば、特殊オブジェクト `String` に対して以下のように関数定義してみましょう。
 
-```javascript
+```kinx
 String.greeting = function(name) {
     System.println("Hello, I am %{name}.");
 };
@@ -1163,7 +1163,7 @@ String.greeting = function(name) {
 
 すると、以下のように書くことができるようになります。
 
-```javascript
+```kinx
 "John".greeting();
 ```
 
