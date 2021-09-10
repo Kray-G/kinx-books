@@ -164,7 +164,7 @@ System.println("hello, world.");
 /* Comment */
 // Comment
 ```
-```coffee
+```kinx
 # Comment
 ```
 

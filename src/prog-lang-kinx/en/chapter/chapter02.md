@@ -162,7 +162,7 @@ As a comment, you can use both a C and C++ style and `#` of a Perl like style.
 /* Comment */
 // Comment
 ```
-```coffee
+```kinx
 # Comment
 ```
 
@@ -196,7 +196,7 @@ b = 10;
 Error: Can not assign a value to the 'const' variable near the <test.kx>:2
 ```
 
-As an assignment, you can use the way of a **deconstructing assignment**, or a **pattern matching assignment**.
+As an assignment, you can use the way of a **destructuring assignment**, or a **pattern matching assignment**.
 Of course, it can be used at not only an assignment but also a declaration statement or arguments of a function.
 
 ```kinx
@@ -215,7 +215,7 @@ Stack Trace Information:
         at <main-block>(test.kx:5)
 ```
 
-There is an explanation in ''\\nameref{Deconstructing and Pattern Matching Assignment}'' about those.
+There is an explanation in ''\\nameref{Destructuring and Pattern Matching Assignment}'' about those.
 
 ### Basic Data Types
 

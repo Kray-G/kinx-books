@@ -701,7 +701,7 @@ var obj = {
     a: x + 1,
     b: y + 2,
     x,          // x: x
-    y           // y: y
+    y,          // y: y
 };
 System.println(obj);
 ```
@@ -816,7 +816,6 @@ new Regex(%|ab+[\t\n]|);   // same as /ab+[\t\n]/
 %m<ab+[\t\n]>  // same as /ab+[\t\n]/
 %m(ab+[\t\n])  // same as /ab+[\t\n]/
 ```
-
 
 ### 文字列メソッドへの適用
 

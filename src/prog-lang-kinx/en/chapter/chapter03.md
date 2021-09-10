@@ -576,7 +576,7 @@ You can swap values in this way.
 [a, b] = [b, a];    // Swap
 ```
 
-Deconstructing assignment is also availbale with a rest operator.
+Destructuring assignment is also availbale with a rest operator.
 
 ```kinx
 var [a, ...b] = [1, 2, 3, 4, 5];
@@ -589,7 +589,7 @@ a = 1
 b = [2, 3, 4, 5]
 ```
 
-See ''\\nameref{Deconstructing and Pattern Matching Assignment}'' for details.
+See ''\\nameref{Destructuring and Pattern Matching Assignment}'' for details.
 
 ## Binary
 
@@ -733,7 +733,7 @@ System.println(val);
 ```
 
 The structure of Object can be used in LHS and it can retrive the values correcponding to the same key.
-This is a deconstructing assignment for Object.
+This is a destructuring assignment for Object.
 
 
 ```kinx
@@ -764,7 +764,7 @@ check(obj);
 {"a":100,"b":200,"c":300,"d":null}
 ```
 
-See ''\\nameref{Deconstructing and Pattern Matching Assignment}'' for details.
+See ''\\nameref{Destructuring and Pattern Matching Assignment}'' for details.
 
 ## Regular Expression
 ### Regular Expression Literal
