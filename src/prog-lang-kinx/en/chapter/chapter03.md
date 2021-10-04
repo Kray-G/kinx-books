@@ -534,14 +534,11 @@ Array can be accessed by index.
 
 ```kinx
 var a = [1, 2, 3];
-var b = [a, 1, 2];
-System.println(b[0][1]);
-System.println(a[-1]);
+System.println([a[1], a[-1]]);
 ```
 
 ```console
-2
-3
+[2, 3]
 ```
 
 As this example, when Array has Array as an item, the first index accesses the Array item and the next index accesses the item of the Array inside Array.
@@ -649,13 +646,11 @@ The negative value also means that it is accessed from the tail of Binary.
 
 ```kinx
 var a = <1, 2, 3>;
-System.println(a[1]);
-System.println(a[-1]);
+System.println([a[1], a[-1]]);
 ```
 
 ```console
-2
-3
+[2, 3]
 ```
 
 ## Object
@@ -1115,6 +1110,97 @@ out of range (af)
 ```
 
 ## Conversion Between Types
+
+Normally the data type will be automatically converted if possible,
+but you can convert it explicitly for the purpose.
+
+### Conversion by Unary `*` Operator
+
+The unary `*` operator is the operator to convert the data type.
+It will affect each data type as follows.
+
+| Before  | After  |                         Examples                          |
+| :-----: | :----: | :-------------------------------------------------------: |
+| Integer | String |                 `97` \\arrow{right} `"a"`                 |
+| Double  | String |              `97.1` \\arrow{right} `"97.1"`               |
+| String  | Array  |      `abcde` \\arrow{right} `[97, 98, 99, 100, 101]`      |
+| Binary  | String | `<0x61, 0x62, 0x63, 0x64, 0x65>` \\arrow{right} `"abcde"` |
+|  Array  | String |     `[97, 98, 99, 100, 101]` \\arrow{right} `"abcde"`     |
+| Object  |  null  |                `{}` \\arrow{right} `null`                 |
+
+### Conversion by Spread Operator
+
+To tell the truth, what the spread operator will do is not a conversion but the copy of data instead.
+For example, you can convert from an array to an binary by the following.
+By the way, the value will be wraparoundded under 0xFF when converting to a binary data.
+
+```kinx
+var ary = [1, 2, 3, 4, 5];
+var bin = <...ary>; // => <0x01, 0x02, 0x03, 0x04, 0x05>
+```
+
+The value can be also inserted inside other data because the spread operator will do the copy.
+
+```kinx
+var ary = [1, 2, 3, 4, 5];
+var bin = <0, ...ary, 6, 7, 8>; // => <0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08>
+```
+
+Also, you can do the following if you want to convert from a binary to an array.
+
+```kinx
+var bin = <1, 2, 3, 4, 5>;
+var ary = [...ary];
+```
+
+See ''\\nameref{Spread Operator}'' for the spread operator itself.
+
+### Conversion by Function
+
+Kinx prepares the functions to convert data types.
+For example, `Integer.parseInt()` is for making it the integer number, and `Double.parseDouble()` for the real number.
+
+```kinx
+var s = "256";
+var n = Integer.parseInt(s);
+System.println([n, n.isInteger]);
+```
+
+```console
+[256, 1]
+```
+
+`Integer.parseInt()` can handle also the big integer.
+
+```kinx
+var s = "10000000000000000000000000000000000000000000000000000000000000000000000";
+var n = Integer.parseInt(s);
+System.println(n);
+System.println([n.isInteger, n.isBigInteger]);
+```
+
+```console
+10000000000000000000000000000000000000000000000000000000000000000000000
+[1, 1]
+```
+
+Moreover, adding `""` is usually used like `"" + a` for making it to the string, but you can use a `toString()` method.
+The behabior of a `toString()` method depends on the target data, but for example, the radix can be also specified for the `toString` method for the integer.
+
+```kinx
+var n = 256;
+var s1 = n.toString();
+var s2 = n.toString(16);
+System.println([s1, s1.isString, s2, s2.isString]);
+```
+
+```console
+["256", 1, "100", 1]
+```
+
+Basically, an array, a binary, or an object will support the `toString()` method.
+Therefore, to support `toString()` method is recommended when you design your own class.
+You will use it well as a Duck Typing in the most situation.
 
 ## Special Object
 

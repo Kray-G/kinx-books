@@ -31,5 +31,6 @@
 ### Shortcut Operator
 ### Ternary Operator
 ### `case-when`
+### Spread Operator
 ### Pipeline Operator
 ### Function Composition Operator
