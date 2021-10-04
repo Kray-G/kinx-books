@@ -1123,7 +1123,7 @@ It will affect each data type as follows.
 | :-----: | :----: | :-------------------------------------------------------: |
 | Integer | String |                 `97` \\arrow{right} `"a"`                 |
 | Double  | String |              `97.1` \\arrow{right} `"97.1"`               |
-| String  | Array  |      `abcde` \\arrow{right} `[97, 98, 99, 100, 101]`      |
+| String  | Array  |     `"abcde"` \\arrow{right} `[97, 98, 99, 100, 101]`     |
 | Binary  | String | `<0x61, 0x62, 0x63, 0x64, 0x65>` \\arrow{right} `"abcde"` |
 |  Array  | String |     `[97, 98, 99, 100, 101]` \\arrow{right} `"abcde"`     |
 | Object  |  null  |                `{}` \\arrow{right} `null`                 |
@@ -1136,14 +1136,22 @@ By the way, the value will be wraparoundded under 0xFF when converting to a bina
 
 ```kinx
 var ary = [1, 2, 3, 4, 5];
-var bin = <...ary>; // => <0x01, 0x02, 0x03, 0x04, 0x05>
+var bin = <...ary>;
+```
+
+```console
+<0x01, 0x02, 0x03, 0x04, 0x05>
 ```
 
 The value can be also inserted inside other data because the spread operator will do the copy.
 
 ```kinx
 var ary = [1, 2, 3, 4, 5];
-var bin = <0, ...ary, 6, 7, 8>; // => <0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08>
+var bin = <0, ...ary, 6, 7, 8>;
+```
+
+```console
+<0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08>
 ```
 
 Also, you can do the following if you want to convert from a binary to an array.
@@ -1151,6 +1159,10 @@ Also, you can do the following if you want to convert from a binary to an array.
 ```kinx
 var bin = <1, 2, 3, 4, 5>;
 var ary = [...ary];
+```
+
+```console
+[1, 2, 3, 4, 5]
 ```
 
 See ''\\nameref{Spread Operator}'' for the spread operator itself.

@@ -5,7 +5,6 @@
 
 <context label="Table:ExpressionPriority"/>
 <context caption="Operators Priority"/>
-<context limit-column="1"/>
 
 
 |   #   |           Item           |                  Examples                                         |
