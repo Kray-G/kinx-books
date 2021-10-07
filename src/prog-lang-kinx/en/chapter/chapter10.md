@@ -3,6 +3,18 @@
 ## How Package Manegement Works
 ### Central Repository
 ### Package Repository
+
+## How To Use Package
+### Search Package
+### Install Package
+### Uninstall Package
+### Package Own Command
+
+## Package Development
+### Create Package Repository
+### Create Package Information
+### Install/Uninstall for Debug
+
 ## `kip` Command
 ### `kip config`
 ### `kip repo`

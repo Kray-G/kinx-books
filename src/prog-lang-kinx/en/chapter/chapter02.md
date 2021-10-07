@@ -107,7 +107,7 @@ The following arguments for a command line are available.
 | `-c`            | Syntax check only. No execute.                                     |
 | `-d`            | Display IR code. No execute.                                       |
 | `-D`            | Display AST. No execute.                                           |
-| `-u`            | Without converting to/from UTF8 in a standard I/O. Windows only.   |
+| `-u`            | Without UTF8 conversion in a standard I/O. Windows only.           |
 | `-q`            | No messages when compiling.                                        |
 | `-i`            | Input a source code from stdin.                                    |
 | `-v`            | Display the version as a short description.                        |
@@ -185,7 +185,7 @@ System.println([a, b, c]);
 [10, 100, null]
 ```
 
-When using `const`, you can not assign a new value to the variable after declaration with compiling error.
+When using `const`, you can not assign a new value to the variable (compiling error).
 
 ```kinx
 const b = 100;
@@ -215,7 +215,7 @@ Stack Trace Information:
         at <main-block>(test.kx:5)
 ```
 
-There is an explanation in ''\\nameref{Destructuring and Pattern Matching Assignment}'' about those.
+There is an explanation in ''\\nameref{Destructuring Assignment and Pattern Matching}'' about those.
 
 ### Basic Data Types
 

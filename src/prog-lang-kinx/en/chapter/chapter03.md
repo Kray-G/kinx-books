@@ -586,7 +586,7 @@ a = 1
 b = [2, 3, 4, 5]
 ```
 
-See ''\\nameref{Destructuring and Pattern Matching Assignment}'' for details.
+See ''\\nameref{Destructuring Assignment and Pattern Matching}'' for details.
 
 ## Binary
 
@@ -730,7 +730,6 @@ System.println(val);
 The structure of Object can be used in LHS and it can retrive the values correcponding to the same key.
 This is a destructuring assignment for Object.
 
-
 ```kinx
 { a, b, x: c } = { a: 100, b: 200, x: 300 };
 System.println({ a, b, c });
@@ -759,7 +758,7 @@ check(obj);
 {"a":100,"b":200,"c":300,"d":null}
 ```
 
-See ''\\nameref{Destructuring and Pattern Matching Assignment}'' for details.
+See ''\\nameref{Destructuring Assignment and Pattern Matching}'' for details.
 
 ## Regular Expression
 ### Regular Expression Literal
@@ -1023,6 +1022,7 @@ As for the stuff marked in **''L''**, it is the method which will perform a lazy
 <context label="Table:KinxEnumerable"/>
 <context caption="Enumerable Methods"/>
 <context limit-column="2"/>
+<context fixed-column="0"/>
 
 |      Method      |                                                    Outline                                                     |   L   |
 | ---------------- | -------------------------------------------------------------------------------------------------------------- | :---: |
@@ -1219,7 +1219,7 @@ You will use it well as a Duck Typing in the most situation.
 Special Object is the object which holds methods to call directly a method for the specific target type, and there are String, Integer, Double, Binary, and Array.
 And also the method itself defined to Special Object and used to call directly a method for the specific target object is called as Special Method.
 
-But adding Special Method to Special Object is never recommended because of following points.
+But adding Special Method is never recommended because of following points.
 
 * Because **it could be used in the library such as adding an embedded special method**.
 * Because **the behavior of Standard Library could be changed and not work correctly**.

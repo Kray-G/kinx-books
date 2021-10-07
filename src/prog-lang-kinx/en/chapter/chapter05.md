@@ -21,7 +21,6 @@
 
 ## Special Flow Control
 ### `methodMissing`
-### Destructuring and Pattern Matching Assignment
 ### Exception
 
 ## Type Annotation
