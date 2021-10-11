@@ -820,7 +820,7 @@ System.println({ a, b, x });
 {"a":1,"b":2,"x":100}
 ```
 
-On the other hand, the following example shows that throwing `NoMatchingPatternException` exception because of not matching `^pred` at `.c[3]` on the object.
+On the other hand, throwing `NoMatchingPatternException` exception in the following example because of not matching `^pred` at `.c[3]` on the object.
 
 ```kinx
 var pred = 400;
@@ -866,19 +866,23 @@ In the next section of `case-when`, let us introduce how to use it well inside a
 
 ## Case-When
 
+`case-when` is ''expression'' in Kinx.
+Therefore, it has an evaluated value as a result, and it can be used with other expressions.
+
+### Differences from `switch-case` and `switch-when`
+
 `case-when` is supported as an expression.
 It has a similar syntax to `switch-case` or `switch-when`, but there are some following differences.
 
-*   `switch-case` and `switch-when` is a statement, but `case-when` is an expression.
-    `case-when` can be used inside an expression, and the result value can be assigned to a variable or be used with calculation.
+*   `switch-case` and `switch-when` is a statement, but `case-when` is an expression, and the result can be assigned to a variable or used with calculation.
 *   `switch-case` is a fallthrough by default, but `case-when` will do automatically `break` similarly as `switch-when`.
     Always the only one of `when` clauses is used.
 *   `switch-case` and `switch-when` will only check if the value is same, but `case-when` will check if the shape of an array or object is the same.
     This is like Ruby\\apos{}s pattern matching syntax of `case-in`.
-*   In `switch-case` and `switch-when`, the order of checking value is normally not guaranteed and it will generate a jump by table in some cases for performance.
-    But when it is in `case-when`, the order of checking is always the written order on the source code and starting it with the top.
+*   In `switch-case` and `switch-when`, the order of checking value is normally not guaranteed and it may generate a jump by table for performance.
+    But in `case-when`, the order is always the written order on the source code and starting it from the top.
 *   When no condition is matched in `switch-case` and `switch-when`, nothing will be done. On the other hand, when it is `case-when`,
-    the exception of `NoMatchingPatternException` will be raised.
+    it throws the `NoMatchingPatternException` exception.
 *   Putting a block to a `when` clause means an on the fly function call.
     Therefore `return` in a block of `when` clause never returns to a caller function, and just returns a value as a result of `when` clause.
 *   `case-when` is an expression, so you need a block when you want to write a statement.
