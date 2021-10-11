@@ -673,7 +673,7 @@ See below for some differences from a pure JSON.
 * A quotation is unnecessary for a key.
 * A value can include an expression.
 * Putting a comma after the last item is available.
-* When a key name and a variable name of a value is same, a short cut style can be used.
+* When a key name and a variable name of a value is same, a key name can be omitted.
 
 You can write Object as below when those above are used in combination.
 

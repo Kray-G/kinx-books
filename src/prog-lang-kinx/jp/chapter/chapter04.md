@@ -263,6 +263,7 @@ System.println([ternary(true, 1, 10), ternary(false, 2, 20)]);
 #### レスト演算子
 
 例えば、レスト演算子は代入や宣言で使用され、配列やバイナリの残りの要素を受け取ることができます。
+ただし、オブジェクトに対してのレスト演算子は未サポートです。
 
 ```kinx
 var [a, ...b] = [1, 2, 3, 4, 5];
@@ -487,7 +488,388 @@ System.println(newScore);
 しかし、パイプライン演算子はその場で値を渡しますが、関数合成演算子は再利用可能な新しい関数を作成するだけであるという違いがあります。
 状況に応じて両方の演算子を使い分けてください。
 
+## 分割代入とパターンマッチ
+
+分割代入とパターンマッチは非常に使いやすく便利な構文を提供します。
+分割代入は JavaScript 由来ですが、その便利さのため Kinx にもすぐに導入されました。
+また、パターンマッチは特に `case-when` 式の中で Ruby の `case-in` に似た非常に強力な表現力を提供します。`case-when` の詳細については「\\nameref{Case-When}」を参照してください。
+
+### 分割代入とパターンマッチとは
+
+Kinx では配列とオブジェクトは良く利用されます。
+オブジェクトを使用すると、データ項目をキーごとに格納する単一のエンティティ（実体）として扱うことができます。
+配列も順序付けされたリストとして各データを集約して利用することができます。
+一方で、これらを関数に渡したり、他のシーンで利用したりしようとした場合、オブジェクト／配列全体を必要としないケース、つまり、個々の「部分」のみが必要なケースがあります。
+
+分割代入（Destructuring assignment）は、配列またはオブジェクトの中身を、そのリテラルを構築するのと同じ形式を利用して複数の変数に「アンパック」できるようにする特別な構文であり、非常に便利な構文です。
+また、パターンマッチではその値が期待する値となっているかを確認することが可能であり、期待しない値が含まれているケースを排除することができます。
+
+分割代入・パターンマッチは、以下で利用可能です。
+
+* 宣言文での代入
+* 代入文での代入
+* 関数の引数
+* `case-when` での条件式
+
+本章では必要に応じていずれかの形式で説明していますが、全ての形式で同様に利用可能です。
+さらに、`case-when` ではパターンマッチとそれを組み合わせた条件式を使って様々なケースに対応することが可能です。
+
+### 配列の分割代入
+
+#### 通常の使い方
+
+以下は、配列を変数に分割する方法の基本的な例です。
+
+```kinx
+var arr = ["John", "Smith"];
+var [name, surname] = arr;
+System.println(name);
+System.println(surname);
+```
+
+```console
+John
+Smith
+```
+
+このように、ある変数の中身をそのまま取り出し、要素分解した形で `name`、`surname` という新しい変数にそれぞれ代入できます。
+
+また、split やその他配列を返すメソッドと組み合わせると非常に便利です。
+例えば次の例は split メソッドを使用した例です。
+
+```kinx
+var [name, surname] = "John Smith".split(' ');
+System.println(name);
+System.println(surname);
+```
+
+```console
+John
+Smith
+```
+
+別の例として、関数の引数として使用すると以下のようになります。
+
+```kinx
+var arr = ["John", "Smith"];
+function destructuring([name, surname]) {
+    System.println(name);
+    System.println(surname);
+}
+destructuring(arr);
+```
+
+```console
+John
+Smith
+```
+
+なお、これはスプレッド演算子を使った以下の例と同じ結果となります。
+
+```kinx
+var arr = ["John", "Smith"];
+function spreading(name, surname) {
+    System.println(name);
+    System.println(surname);
+}
+spreading(...arr);
+```
+
+```console
+John
+Smith
+```
+
+#### 値の交換
+
+この分割代入のテクニックは、値の交換にも使えます。
+
+```kinx
+var a = 1, b = 2;
+[a, b] = [b, a];
+System.println([a, b]);
+```
+
+```console
+[2, 1]
+```
+
+3つ以上の値のローテーションなども可能です。
+
+```kinx
+var a = 1, b = 2, c = 3;
+[a, b, c] = [c, a, b];
+System.println([a, b, c]);
+```
+
+```console
+[3, 1, 2]
+```
+
+#### 残りの要素の取得
+
+通常、代入されずに残った要素は破棄されます。
+
+```kinx
+var [a, b, c] = 10.times { => _1 * 10 + 1 };
+System.println({ a, b, c });
+```
+
+```console
+{"a":1,"b":11,"c":21}
+```
+
+この場合、レスト演算子を使用することで残りの要素を配列として受け取ることが可能です。
+ただし、受け取る側の配列要素の最後に配置するようにしてください。
+
+```kinx
+var [a, b, c, ...d] = 10.times { => _1 * 10 + 1 };
+System.println({ a, b, c, d });
+```
+
+```console
+{"a":1,"b":11,"c":21,"d":[31,41,51,61,71,81,91]}
+```
+
+#### 要素の省略
+
+末尾の要素は受け取る変数を指定しなければ良いのですが、
+先頭や途中に受け取る必要のない要素があった場合は省略することも可能です。
+
+```kinx
+var [, b, , ...d] = 10.times { => _1 * 10 + 1 };
+System.println({ b, d });
+```
+
+```console
+{"b":11,"d":[31,41,51,61,71,81,91]}
+```
+
+#### デフォルト値
+
+代入する変数の数よりも配列の要素数のほうが少ない場合でもエラーにはなりません。
+不足している値は null となります。
+デフォルト値の指定はできません。
+
+```kinx
+var [a, b, c, d, e, f, g, h] = [1, 2, 3];
+System.println({ a, b, c, d, e, f, g, h });
+```
+
+```console
+{"a":1,"b":2,"c":3,"d":null,"e":null,"f":null,"g":null,"h":null}
+```
+
+#### その他の代入
+
+左辺値となるものであれば、全て代入先として指定することが可能です。
+以下の例では、`user` オブジェクトの各プロパティに分割した値を直接代入しています。
+
+```kinx
+[user.name, user.surname] = "John Smith".split(' ');
+System.println(user);
+```
+
+```console
+{"name":"John","surname":"Smith"}
+```
+
+### オブジェクトの分割代入
+
+#### 通常の使い方
+
+オブジェクトの分割代入は、キーに対応する値の部分に変数などの左辺値を配置することで実施します。
+その際、順序は考慮されません。
+
+```kinx
+var { height: h, width: w, title: t } = { title: "Menu", height: 200, width: 100 };
+System.println([h, w, t]);
+```
+
+```console
+[200, 100, "Menu"]
+```
+
+#### キー名の省略
+
+オブジェクトには、省略表記というキー名と変数名が同じ場合にキー名を省略することができる、という機能があります。
+この機能によって、さらに容易に分割代入式を書くことができます。
+
+```kinx
+var { height, width, title } = { title: "Menu", height: 200, width: 100 };
+System.println([height, width, title]);
+```
+
+```console
+[200, 100, "Menu"]
+```
+
+また、これによって、関数呼び出しにおける「名前付き引数」のような機能も実現可能です。
+
+```kinx
+function greeting({ name, age }) {
+    System.println("My name is %{name}, and %{age} years old.");
+}
+greeting({ name: "John", age: 29 });
+```
+
+```console
+My name is John, and 29 years old.
+```
+
+### 配列のパターンマッチ
+
+左辺値に定数を記載すると該当の要素がその値であるかをチェックします。
+
+```kinx
+[100, b, c] = [100, 200, 300];
+System.println([b, c]);
+```
+
+```console
+[200, 300]
+```
+
+ただし、変数を記載した場合は通常その変数は代入先として認識されます。
+そこで、変数の値を固定してチェック対象とする場合はピン演算子（''`^`''）というものを使用します。
+これによって、代入先としての変数ではなく、変数の保持する値をパターンチェックのための固定値として扱うようになります。
+
+次の例では、最初の要素が 1 であるため、`b` と `c` への代入が成功します。
+
+```kinx
+var a = 1;
+[^a, b, c] = [1, 2, 3];
+System.println([a, b, c]);
+```
+
+```console
+[1, 2, 3]
+```
+
+次の例では、最初の要素が 1 ではないため、`NoMatchingPatternException` 例外が送出されることになります。
+
+```kinx
+var a = 1;
+[^a, b, c] = [10, 20, 30];
+System.println([a, b, c]);
+```
+
+```console
+Uncaught exception: No one catch the exception.
+NoMatchingPatternException: Pattern not matched
+Stack Trace Information:
+        at <main-block>(test.kx:2)
+```
+
+### オブジェクトのパターンマッチ
+
+オブジェクト内の値として定数を記載すると、同じ場所に同じ値があるかを確認します。
+
+```kinx
+{ a: 100, b, c } = { a: 100, b: 200, c: 300 };
+System.println([b, c]);
+```
+
+```console
+[200, 300]
+```
+
+オブジェクトの場合も配列と同様に、変数の値を固定してチェック対象とする場合にはピン演算子（''`^`''）を使用します。
+
+次の例では、`a` が 1 であるため、`b` と `c` への代入が成功します。
+
+```kinx
+var a = 1;
+{ a: ^a, b, c } = { a: 1, b: 2, c: 3 };
+System.println([a, b, c]);
+```
+
+```console
+[1, 2, 3]
+```
+
+次の例では、`a` が 1 ではないため、`NoMatchingPatternException` 例外が送出されることになります。
+
+```kinx
+var a = 1;
+{ a: ^a, b, c } = { a: 10, b: 20, c: 30 };
+System.println([a, b, c]);
+```
+
+```console
+Uncaught exception: No one catch the exception.
+NoMatchingPatternException: Pattern not matched
+Stack Trace Information:
+        at <main-block>(test.kx:2)
+```
+
+### 複雑な例
+
+オブジェクトと配列が複雑に絡み合った例でも問題無く動作します。
+例えば、オブジェクトまたは配列に他のオブジェクトや配列が含まれている場合、より複雑な左辺のパターンを使用して、より深い部分を抽出することもできます。
+
+次の例では定数およびピン演算子で指定された値が全てマッチするため、問題無く各変数への代入が行われます。
+
+```kinx
+var pred = 4;
+{ a, b, c: [1, 2, { c: x }, ^pred]} = { a: 1, b: 2, c: [1, 2, { c: 100 }, 4]};
+System.println({ a, b, x });
+```
+
+```console
+{"a":1,"b":2,"x":100}
+```
+
+一方で、次の代入の例ではオブジェクトの `.c[3]` に位置する `^pred` の値がマッチしていないために `NoMatchingPatternException` 例外が送出されることになります。
+
+```kinx
+var pred = 400;
+{ a, b, c: [1, 2, { c: x }, ^pred]} = { a: 1, b: 2, c: [1, 2, { c: 100 }, 4]};
+System.println({ a, b, x });
+```
+
+```console
+Uncaught exception: No one catch the exception.
+NoMatchingPatternException: Pattern not matched
+Stack Trace Information:
+        at <main-block>(test.kx:5)
+```
+
+次の例は、関数の引数として入れ子のオブジェクトや配列を使った複雑な例となります。
+
+```kinx
+var options = {
+    title: "Title-1", width: 100, height: 10,
+    elements: ["Elem-1", "Elem-2"]
+};
+
+function showOptions({
+    title,
+    width:  w,  // width is assigned to w
+    height: h,  // height is assigned to h
+    elements: [elem1, elem2],
+}) {
+    System.println('%{title} - width:%{w}, height:%{h}');
+    System.println({ elem1, elem2 });
+}
+
+showOptions(options);
+```
+
+```console
+Title-1 - width:100, height:10
+{"elem1":"Elem-1","elem2":"Elem-2"}
+```
+
+パターンマッチでは、このように配列とオブジェクトが複雑に組み合わされたものに対しても問題無く動作します。
+次の `case-when` の章では、それをさらに活用した形で式に組み込んで使用する方法をご紹介します。
+
 ## Case-When
+
+Kinx では `case-when` は「式」となります。
+したがって、評価された結果の値を持ち、他の式や演算子と組み合わせて使用することができます。
+
+### `switch-case`、`switch-when` との違い
 
 `case-when` 式は `switch-case` や `switch-when` のような構文として導入されていますが、以下のような違いがあります。
 
@@ -495,7 +877,7 @@ System.println(newScore);
 * `switch-case` はデフォルトではフォールスルーですが、`case-when` は `switch-when` と同様に自動的に `break` します。常にいずれかの `when` 句が使用されます。
 * `switch-case` と `switch-when` は値が同じかどうかだけをチェックしますが、`case-when` は配列やオブジェクトの形状が同じかどうかをチェックします。これは Ruby のパターンマッチ構文である`case-in` に似ています。
 * `switch-case` や `switch-when` では、値をチェックする順番は通常保証されておらず、パフォーマンスのために場合によってはテーブル・ジャンプを生成します。しかし、`case-when` ではチェックの順番は常にソースコードに書かれた順番で、上から順にチェックしていきます。
-* `switch-case` や `switch-when` で条件にマッチしない場合は、何もしません。一方、`switch-case-when`の場合 `NoMatchingPatternException` 例外が発生します。
+* `switch-case` や `switch-when` では条件にマッチしなかった場合、何もせずに先に進みます。一方で、`case-when` の場合 `NoMatchingPatternException` 例外が発生します。
 * `when` にブロックを置くことは、その場で関数を呼び出すことを意味します。したがって、`when` 節のブロック内の `return` は呼び出し元の関数に戻ることはなく、`when` 節の結果を返すだけです。
 * `case-when` は式なので、文を書きたいときはブロックが必要になります。前述の通り、ブロックは自動的に呼び出される関数オブジェクトなので、複数の文をブロックに書いて実行することができます。
 * `case-when` は式なので、ステートメントの終わりにはセミコロン（''`;`''）が必要です。
@@ -802,19 +1184,3 @@ test(10);
 test(10.0);
 test("10.0");
 ```
-
-## 分割代入とパターンマッチ
-
-分割代入とパターンマッチに関しては少し説明が必要と思いますので、個別のセクションを用意しました。
-
-### 適用範囲
-
-### 配列の分割代入
-
-### オブジェクトの分割代入
-
-### 配列のパターンマッチ
-
-### オブジェクトのパターンマッチ
-
-### 複雑な例

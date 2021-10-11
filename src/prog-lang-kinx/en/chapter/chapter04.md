@@ -263,6 +263,7 @@ A spread/rest operator is used to destruct or to combine an array or an object.
 #### Rest Operator
 
 For example, it is used in assignment or declaration as a rest operator, and it can receive a rest items of an array or binary.
+Note that a rest operator is not suported for object.
 
 ```kinx
 var [a, ...b] = [1, 2, 3, 4, 5];
@@ -484,10 +485,384 @@ System.println(newScore);
 57
 ```
 
-A pipeline operator and a function composition operator is vary similar functionality.
-However, there is a difference as a pipeline operator will pass the value on the fly,
-but a function composition operator will just create a new function which can be reusable.
-You can use both operators depended on the situation.
+A pipeline and a function composition operator is vary similar functionality.
+However, there is a difference as a pipeline will pass the value on the fly,
+but a function composition will just create a new function which can be reusable.
+Use those depended on the situation.
+
+## Destructuring Assignment and Pattern Matching
+
+Destructuring assignment and pattern matching provide an easy to use and convenient syntax and it comes from JavaScript, but it was quickly introduced to Kinx because of its convenience.
+Pattern matching also provides very powerful expressiveness like Ruby\\apos{}s `case-in` especially in `case-when` expressions.
+See \\nameref{Case-When} for details on `case-when`.
+
+### About Destructuring Assignment and Pattern Matching
+
+Arrays and objects are often used in Kinx.
+Objects allow you to treat data items as a single entity that stores them by key.
+Arrays can also be used to aggregate each piece of data into an ordered list.
+On the other hand, when we want to pass them to functions or use them in other scenes, there are cases where we do not need the whole object/array, but only the individual ''parts.''
+
+Destructuring assignment is a special and very useful syntax that allows the contents of an array or object to be ''unpacked'' into multiple variables using the same format as constructing its literals.
+Pattern matching also makes it possible to check whether the value is the one you expect, and to eliminate cases where the value contains an unexpected value.
+
+Destructuring assignment and pattern matching can be used as follows.
+
+* Assignment in declaration statement.
+* Assignment in assignment statement.
+* Function arguments.
+* Condition expression in `case-when`.
+
+This section describes it in one of the styles as needed, but it can be used as well in all styles.
+In addition, `case-when` can handle various cases using pattern matching and combined conditionals.
+
+### Destructuring Assignment for Array
+
+#### Normal Usage
+
+Below is the basic example about how to extract array to variables.
+
+```kinx
+var arr = ["John", "Smith"];
+var [name, surname] = arr;
+System.println(name);
+System.println(surname);
+```
+
+```console
+John
+Smith
+```
+
+As you see, it take elements in an array as it is, and those are extracted and assigned to `name` and `surname`.
+
+Moreover, it is convenient to combine with split or some method which returns an array.
+
+```kinx
+var [name, surname] = "John Smith".split(' ');
+System.println(name);
+System.println(surname);
+```
+
+```console
+John
+Smith
+```
+
+As another example, below is when used as a function argument.
+
+```kinx
+var arr = ["John", "Smith"];
+function destructuring([name, surname]) {
+    System.println(name);
+    System.println(surname);
+}
+destructuring(arr);
+```
+
+```console
+John
+Smith
+```
+
+By the way, you can write it same with a spread operator.
+
+```kinx
+var arr = ["John", "Smith"];
+function spreading(name, surname) {
+    System.println(name);
+    System.println(surname);
+}
+spreading(...arr);
+```
+
+```console
+John
+Smith
+```
+
+#### Swap Values
+
+This technique is also available for swapping values.
+
+```kinx
+var a = 1, b = 2;
+[a, b] = [b, a];
+System.println([a, b]);
+```
+
+```console
+[2, 1]
+```
+
+It can be also available for rotation of 3 or more values.
+
+```kinx
+var a = 1, b = 2, c = 3;
+[a, b, c] = [c, a, b];
+System.println([a, b, c]);
+```
+
+```console
+[3, 1, 2]
+```
+
+#### Retrieving Rest Elements
+
+Normally, elements which is not assigned are ignored.
+
+```kinx
+var [a, b, c] = 10.times { => _1 * 10 + 1 };
+System.println({ a, b, c });
+```
+
+```console
+{"a":1,"b":11,"c":21}
+```
+
+In this case, you can use a rest operator to get remaining elements as an array.
+However, it have to be located to the last parameter in a receiver.
+
+```kinx
+var [a, b, c, ...d] = 10.times { => _1 * 10 + 1 };
+System.println({ a, b, c, d });
+```
+
+```console
+{"a":1,"b":11,"c":21,"d":[31,41,51,61,71,81,91]}
+```
+
+#### Omitting Element
+
+You can ignore tail elements if you do not place any variable, but you can also ignore the head or halfway of an array by the way below.
+
+```kinx
+var [, b, , ...d] = 10.times { => _1 * 10 + 1 };
+System.println({ b, d });
+```
+
+```console
+{"b":11,"d":[31,41,51,61,71,81,91]}
+```
+
+#### Default Value
+
+Even when the number of variables to be assigned is less than elements in array, no errors happen.
+Missing values are null.
+You can not define the default.
+
+```kinx
+var [a, b, c, d, e, f, g, h] = [1, 2, 3];
+System.println({ a, b, c, d, e, f, g, h });
+```
+
+```console
+{"a":1,"b":2,"c":3,"d":null,"e":null,"f":null,"g":null,"h":null}
+```
+
+#### Other Assignements
+
+If it is l-value, those can be all specified as a destination of assignment.
+Below is the example to assign extracted values directly to each property.
+
+```kinx
+[user.name, user.surname] = "John Smith".split(' ');
+System.println(user);
+```
+
+```console
+{"name":"John","surname":"Smith"}
+```
+
+### Destructuring Assignment for Object
+
+#### Normal Usage
+
+The variable is placed to the value place corresponding to the key when it is a destructuring assignment of objects.
+The order is never considered.
+
+```kinx
+var { height: h, width: w, title: t } = { title: "Menu", height: 200, width: 100 };
+System.println([h, w, t]);
+```
+
+```console
+[200, 100, "Menu"]
+```
+
+#### Omitting Key Name
+
+For objects, there is a feature that a key name can be omitted when a key name and a variable name of a value is same.
+Using this feature allows to write it more easily.
+
+```kinx
+var { height, width, title } = { title: "Menu", height: 200, width: 100 };
+System.println([height, width, title]);
+```
+
+```console
+[200, 100, "Menu"]
+```
+
+And by this, it is possible to realize the feature like named arguments.
+
+```kinx
+function greeting({ name, age }) {
+    System.println("My name is %{name}, and %{age} years old.");
+}
+greeting({ name: "John", age: 29 });
+```
+
+```console
+My name is John, and 29 years old.
+```
+
+### Pattern Matching for Array
+
+When putting the constant in l-value place, the value at the same place is checked if it is same as that value.
+
+```kinx
+[100, b, c] = [100, 200, 300];
+System.println([b, c]);
+```
+
+```console
+[200, 300]
+```
+
+However, if you put a variable, it is handled as a destination of assignment.
+That is why you have to use ''`^`'' as a pin operator to treat it as a check target.
+In this way, the value in the variable can be a fixed value to be checked instead of treating a destination of assignment.
+
+The following shows assigning to `b` and `c` is successful because the first element is 1.
+
+```kinx
+var a = 1;
+[^a, b, c] = [1, 2, 3];
+System.println([a, b, c]);
+```
+
+```console
+[1, 2, 3]
+```
+
+The following example shows `NoMatchingPatternException` exception is thrown because the first element is not 1.
+
+```kinx
+var a = 1;
+[^a, b, c] = [10, 20, 30];
+System.println([a, b, c]);
+```
+
+```console
+Uncaught exception: No one catch the exception.
+NoMatchingPatternException: Pattern not matched
+Stack Trace Information:
+        at <main-block>(test.kx:2)
+```
+
+### Pattern Matching for Object
+
+When the constant is written in an object, it checks if the value is at the same place.
+
+```kinx
+{ a: 100, b, c } = { a: 100, b: 200, c: 300 };
+System.println([b, c]);
+```
+
+```console
+[200, 300]
+```
+
+Even when it is an object as well as an array, you can use ''`^`'' of a pin operator to fix a value of a variable.
+
+In the following example, assignment to `b` and `c` is successful because `a` is 1.
+
+```kinx
+var a = 1;
+{ a: ^a, b, c } = { a: 1, b: 2, c: 3 };
+System.println([a, b, c]);
+```
+
+```console
+[1, 2, 3]
+```
+
+In the following shows `NoMatchingPatternException` exception is thrown because `a` is not 1.
+
+```kinx
+var a = 1;
+{ a: ^a, b, c } = { a: 10, b: 20, c: 30 };
+System.println([a, b, c]);
+```
+
+```console
+Uncaught exception: No one catch the exception.
+NoMatchingPatternException: Pattern not matched
+Stack Trace Information:
+        at <main-block>(test.kx:2)
+```
+
+### Complex Examples
+
+There is no problem with a complex example which combines an object and an array.
+For example, when an object or array is in another object or array, you can extract a deeper element by more complex left side pattern.
+
+The following example shows an assignement is successful because all constant and pinned values are matched without problems.
+
+```kinx
+var pred = 4;
+{ a, b, c: [1, 2, { c: x }, ^pred]} = { a: 1, b: 2, c: [1, 2, { c: 100 }, 4]};
+System.println({ a, b, x });
+```
+
+```console
+{"a":1,"b":2,"x":100}
+```
+
+On the other hand, the following example shows that throwing `NoMatchingPatternException` exception because of not matching `^pred` at `.c[3]` on the object.
+
+```kinx
+var pred = 400;
+{ a, b, c: [1, 2, { c: x }, ^pred]} = { a: 1, b: 2, c: [1, 2, { c: 100 }, 4]};
+System.println({ a, b, x });
+```
+
+```console
+Uncaught exception: No one catch the exception.
+NoMatchingPatternException: Pattern not matched
+Stack Trace Information:
+        at <main-block>(test.kx:5)
+```
+
+The following example is a complex example with nested objects or arrays in function arguments.
+
+```kinx
+var options = {
+    title: "Title-1", width: 100, height: 10,
+    elements: ["Elem-1", "Elem-2"]
+};
+
+function showOptions({
+    title,
+    width:  w,  // width is assigned to w
+    height: h,  // height is assigned to h
+    elements: [elem1, elem2],
+}) {
+    System.println('%{title} - width:%{w}, height:%{h}');
+    System.println({ elem1, elem2 });
+}
+
+showOptions(options);
+```
+
+```console
+Title-1 - width:100, height:10
+{"elem1":"Elem-1","elem2":"Elem-2"}
+```
+
+A pattern matching works with no problem even with a complex case of objects and arrays.
+In the next section of `case-when`, let us introduce how to use it well inside an expression by utilizing it.
 
 ## Case-When
 
@@ -814,19 +1189,3 @@ test(10);
 test(10.0);
 test("10.0");
 ```
-
-## Destructuring Assignment and Pattern Matching
-
-As a little description about Destructuring Assignment and Pattern Matching is needed, this section is prepared.
-
-### Scope
-
-### Destructuring Assignment for Array
-
-### Destructuring Assignment for Object
-
-### Pattern Matching for Array
-
-### Pattern Matching for Object
-
-### Complex Examples
