@@ -313,8 +313,7 @@ System.println(a.c);
 また、その値は変数への代入が可能です。
 
 ```kinx
-// 式
-z = 5 + (a * 2) + some(x)
+z = 5 + (a * 2) + some(x)   // 式の例
 ```
 
 「式」の詳細については「\\nameref{式と演算子}」で説明しています。
@@ -331,14 +330,12 @@ z = 5 + (a * 2) + some(x)
 なお、`if` 文は C 言語と同様にぶら下がり `else` です。
 
 ```kinx
-// if 文の例
 if (expression1) {
     return a;   // 式文
 } else if (expression2) {
     return b;
-} else {
+} else
     return c;
-}
 ```
 
 「文」の詳細については「\\nameref{文と制御構造}」を参照してください。

@@ -311,8 +311,7 @@ When the expression has been finally evaluated, the whole expression shows a spe
 The value can also be assigned to a variable.
 
 ```kinx
-// expression
-z = 5 + (a * 2) + some(x)
+z = 5 + (a * 2) + some(x)   // example of expression
 ```
 
 The details of expressions are described in ''\\nameref{Expession and Operators}''.
@@ -328,14 +327,12 @@ The end of an expression statement needs a semi-colon of ''`;`''.
 By the way, `if` block is the same as C syntax, and it is a dangling `else`.
 
 ```kinx
-// Example of if
 if (expression1) {
     return a;   // expression statement
 } else if (expression2) {
     return b;
-} else {
+} else
     return c;
-}
 ```
 
 See ''\\nameref{Statement and Flow Control} for the detail of a statement.

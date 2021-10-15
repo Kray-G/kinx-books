@@ -1,61 +1,285 @@
 
-# 名前空間・クラス・モジュール
-## 名前空間
+# クラス・モジュール・名前空間
 
-### 名前空間オブジェクト
+## クラス
 
-キーワード `namespace` を使用して、名前空間を使用可能です。
+### クラスとは
 
-名前空間は **オブジェクト** であり、
-名前空間内で宣言されたクラス、モジュールは名前空間オブジェクトに設定されます。
-ただし、定数等は名前空間オブジェクトには自動的に設定されないため、自分で設定する必要があります。
+クラスとは、データと手続きのセットのことです。
+Kinxはプロトタイプベースの言語ですが、オブジェクトの形状を定義するために、`class`キーワードが用意されています。
+
+### 基本スタイル
+
+クラスの定義は、基本的には「引数がある場合」と「引数がない場合」があります。
 
 ```kinx
-namespace N {
-    class A {
-        ...
-    }
-
-    const X = 10;
-    N.X = 100;
-
-    var a = new A(); // OK
-    ...
-}
-
-// var a = new A(); // エラー
-var a = new N.A(); // OK
-
-// System.println(X); // エラー
-System.println(N.X); // OK
+class A { /* ... */ }
+class A() { /* ... */ }
+class A(a, b) { /* ... */ }
 ```
 
-名前空間はネストできます。
+上記の場合、`class A` は `class A()` と同じ意味です。
+
+### 継承
+
+クラスの継承には ''`:`'' が使われます。
+継承のための引数も単純なクラス定義と同じで、引数が無い場合には引数リストを省略することができます。
+継承の例を以下に示します。
+
+```kinx
+class A : B { /* ... */ }
+class A() : B { /* ... */ }
+class A : B(true) { /* ... */ }
+class A(a, b) : B(b) { /* ... */ }
+```
+
+### インスタンス化
+
+クラスオブジェクトは `new` 演算子によってインスタンス化されます。
+オブジェクトをインスタンス化する際には、`new ClassName()` のような関数呼び出しスタイルを使わなければなりません。
+つまり、`new ClassName` だけでは意味をなしません。
+
+```kinx
+class A { /* ... */ }
+var a = new A();
+```
+
+### `this` と `@` キーワード
+
+キーワードの `this` は、インスタンスそのものを意味します。
+
+```kinx
+class A {
+    public flagOnAlt() {
+        this.flagOn();
+    }
+    public flagOn() {
+        this.flag = true;
+    }
+}
+```
+
+また、''`this.`''（`this` + ドット）の代わりに ''`@`'' を使うこともできます。
+これにより、上記のコードの代わりに以下のように書くこともできます。
+
+```kinx
+class A {
+    public flagOnAlt() {
+        @flagOn();
+    }
+    public flagOn() {
+        @flag = true;
+    }
+}
+```
+
+### データ
+
+##### プライベート・データとパブリック・データ
+
+クラスのスコープで宣言された変数は、ローカルなプライベート変数です。
+一方 `this` のプロパティはパブリック変数です。
+
+```kinx
+class A {
+    var flag_ = false;  // ローカルなプライベート変数
+    public flagOn() {
+        @flagOnActual();
+    }
+    public flagOnActual() {
+        @flag = true;   // パブリック変数
+    }
+}
+
+var a = new A();
+a.flagOn();
+System.println(a.flag ? "true" : "false");
+```
+
+```console
+true
+```
+
+### メソッド
+
+メソッドは `public` および `private` キーワードと共に定義されます。
+`private` で定義されたメソッドは、ローカルなクラス・スコープの中だけで使われます。
+一方、`public` で定義されたメソッドは、インスタンスのプロパティとしてアクセス可能です。
+
+```kinx
+class A {
+    private method1() {
+        /* ... */
+    }
+    public method2() {
+        method1();  // Okay. `method1` はクラス内で参照可能。
+        /* ... */
+    }
+    private method3() {
+        method2();  // `method2` もクラス内で参照可能。
+        @method2(); // `method2` は `this` を通しての参照も可能。
+    }
+}
+
+var a = new A();
+// a.method1();     // Error. `method1` はインスタンスを通して参照不可能。
+a.method2();        // Okay. `method2` はインスタンスを通して参照可能。
+```
+
+### 特別なメソッド
+
+`class` キーワードはいくつかの特別なメソッドを定義します。
+
+##### `initialize`
+
+`initialize` メソッドが定義されている場合は、インスタンス化された直後に自動的に呼び出されます。
+`initialize` メソッドは `public` および `private` どちらで定義しても構いません。
+
+```kinx
+class A {
+    private initialize() {
+        System.println("called");
+    }
+}
+
+var a = new A();
+```
+
+```console
+called
+```
+
+##### `instanceOf`
+
+クラスのインスタンスは，自動的に `instanceOf` メソッドを持っています。
+このメソッドはクラス名を変数として受け取り、対象となるオブジェクトが指定されたクラスや基底クラスのインスタンスであれば、trueを返します。
+
+```kinx
+class C {};
+class B {};
+class A : B {};
+
+var a = new A();
+System.println(a.instanceOf(A) ? "true" : "false");
+System.println(a.instanceOf(B) ? "true" : "false");
+System.println(a.instanceOf(C) ? "true" : "false");
+```
+
+```console
+true
+true
+false
+```
+
+## モジュール
+
+### モジュールとは
+
+モジュールは、クラスの機能を拡張するために使用されます。
+これは通常、異なる種類のクラスにまたがる共通の機能のために使用されます。
+
+### 基本スタイル
+
+モジュールを定義する方法は、基本的に以下の通りです。
+
+```kinx
+module M { 
+    /* ... Defines a public method
+        to extend a host class which this is mixined into. */
+}
+```
+
+### ミックスイン
+
+モジュールは `mixin` キーワードでクラスにミックスインされます。
+
+```kinx
+class A {
+    mixin M;
+    /* ... */
+}
+```
+
+`mixin` は以下のように複数のモジュールを指定することができます。
+
+```kinx
+class A {
+    mixin M1, M2, M3;
+    /* ... */
+}
+```
+
+### クラスの拡張
+
+モジュールをクラスにミックスインすることで、そのモジュールで定義されたメソッドがクラスに追加されます。
+例えば、`method1` メソッドを持つモジュール `M` を `A` のクラスに組み込んだ場合、`A` も `method1` メソッドを持ち、使用することができます。
+このとき、`method1` メソッドは `public` メソッドでなければならないことに注意してください。
+
+```kinx
+module M {
+    public method1() {
+        System.println("This is a method1");
+    }
+}
+
+class A {
+    mixin M;
+}
+
+new A().method1();
+```
+
+```console
+This is a method1
+```
+
+## 名前空間
+
+### 名前空間とは
+
+キーワード `namespace` で定義される名前空間は、クラスやモジュールなどを保持するスコープであり、オブジェクトです。
+例えば、クラス名は名前空間オブジェクトのプロパティとなります。
+
+### 名前空間の定義
+
+名前空間はキーワード `namespace` を使って、以下のように定義して使用できます。
 
 ```kinx
 namespace A {
-namespace B {
-
-    class X { ... }
-
-} // namespace B
-
-    var x = new B.X(); // OK
-
-} // namespace A
-
-var x = new A.B.X(); // OK
+    class X {
+        private initialize() {
+            System.println("X was instanciated.");
+        }
+    }
+}
+var x = new A.X();
 ```
 
-## クラス
-### クラスとは
-### クラスの定義
-### サブクラスと継承
+```console
+X was instanciated.
+```
 
-## モジュール
-### モジュールとは
-### モジュールの定義
-### ミックスイン
+名前空間は入れ子にすることができます。
+あるネームスペースを別のネームスペースに入れることができます。
+
+```kinx
+namespace A {
+    namespace B {
+        class X {
+            private initialize() {
+                System.println("X was instanciated.");
+            }
+        }
+    }
+    var x = new B.X();
+}
+var x = new A.B.X();
+```
+
+```console
+X was instanciated.
+X was instanciated.
+```
 
 ## 演算子オーバーライド
 
@@ -104,7 +328,6 @@ System.println(s2.value);  // => 110
 ```
 
 `a += b` も内部的には `a = a + b` に展開されるので正しく動作します。
-
 尚、オブジェクトに対するメソッド呼び出しなので、次のようにも書けます。
 
 ```kinx
@@ -134,11 +357,16 @@ System.println(('b'..'z')[1]);
 c
 ```
 
-`[]` 演算子もメソッド呼び出し風に書くと以下のようになります。
+以下のように、関数呼び出しのように直接 `[]` 演算子を書いても、同じ結果が得られます。
 
 ```kinx
-System.println((2..10).[](1));     // => 3
-System.println(('b'..'z').[](1));  // => 'c'
+System.println((2..10).[](1));
+System.println(('b'..'z').[](1));
+```
+
+```console
+3
+c
 ```
 
 ### `()` 演算子

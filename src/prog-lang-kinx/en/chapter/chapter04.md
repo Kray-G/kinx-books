@@ -1178,7 +1178,7 @@ test("10.0");
 10.0 is String
 ```
 
-Note that you should wrap it by `(` and\\hs{}`)` if it is not a simple style of an anonymous function,
+Note that you should wrap it by ''`(`'' and ''`)`'' if it is not a simple style of an anonymous function,
 or it will cause a compile error.
 
 ```kinx
