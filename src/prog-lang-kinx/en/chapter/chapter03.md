@@ -134,15 +134,12 @@ Even for big integer operations, this level of operation can be completed in an 
 ### Real Number
 
 The real number is a double-precision value in C.
-As for a real number literal, only a normal real number representation is supported and the exponent style is not supported so far[^dblexp]。
-
-If the value is a real number, `.isDouble` will be true.
+As for a real number literal, both a normal real number and an exponent representation are supported, and `.isDouble` will be true if the value is a real number.
 Moreover, when the result is a real number even with calculating between integers, it will be converted to a real number.
 
-[^dblexp]: I wonder that I should do it...
-
 ```kinx
-var d = 0.5;    // a real number literal
+var d1 = 0.5;       // a real number literal by a normal representation.
+var d2 = 5.0e-1;    // a real number literal by an exponent representation.
 function eval(f) {
     r = f(3, 2);
     System.println("r = %3s, r.isDouble = %s" % r % (r.isDouble ? "true" : "false"));
